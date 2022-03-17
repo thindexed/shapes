@@ -15,4 +15,4 @@ spec:
     spec:
       containers:
       - name: shapes
-        image: docker.io/freegroup/thindexed-permissions:0.1.0-13
+        image: docker.io/freegroup/thindexed-shapes:0.1.0-1
