@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shapes
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: shapes
+  template:
+    metadata:
+      labels:
+        name: shapes
+    spec:
+      containers:
+      - name: shapes
+        image: docker.io/freegroup/thindexed-permissions:0.1.0-13
