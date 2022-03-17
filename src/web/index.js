@@ -4,6 +4,7 @@
 // created with http://www.draw2d.org
 //
 //
+console.log($)
 var circuit_74LSXX_74LS90 = CircuitFigure.extend({
 
    NAME: "circuit_74LSXX_74LS90",
