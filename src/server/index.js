@@ -56,7 +56,7 @@ async function  runServer() {
   app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => module.exports.renameFile(shapesDir, req.body.from, req.body.to, res))
   app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => module.exports.createFolder(shapesDir, req.body.filePath, res))
   
-  app.post('/', (req, res) => {
+  app.post('/shapes/global/save', (req, res) => {
       let githubPath = req.body.filePath
       let content = req.body.content
       let reason = req.body.commitMessage
@@ -71,8 +71,7 @@ async function  runServer() {
   
 
   http.listen(PORT, function () {
-    console.log('| System is up and running. Copy the URL below and open this               |');
-    console.log('| in your browser: http://localhost:'+PORT+'/                                  ');
+    console.log('| System is up and running on http://localhost:'+PORT+'/                                  ');
     console.log("============================================================================")
   });
 }
