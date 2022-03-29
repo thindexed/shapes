@@ -62,7 +62,7 @@ async function  runServer() {
       let reason = req.body.commitMessage
       // create the js/png/md async to avoid a blocked UI
       //
-      thumbnail(baseDir, githubPath)
+      //thumbnail(baseDir, githubPath)
 
       // commit the shape to the connected github backend
       // (if configured)
