@@ -16,3 +16,6 @@ spec:
       containers:
       - name: shapes
         image: <image-name>
+        envFrom:
+        - secretRef:
+            name: github-secrets
