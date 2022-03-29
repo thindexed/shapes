@@ -12,7 +12,7 @@ spec:
       - uri:
           prefix: "/shapes"
       rewrite:
-        uri: "/"
+        uri: "/shapes"
       route:
         - destination:
             host: shapes

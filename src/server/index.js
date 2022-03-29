@@ -8,6 +8,8 @@ const update = require("./update")
 const {thumbnail} = require("./thumbnail")
 const shapesDir = path.normalize(__dirname + '/../shapes/')
 
+const PORT = process.env.PORT || 8080
+
 console.log(shapesDir)
 
 // Tell the bodyparser middleware to accept more data
@@ -26,7 +28,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 async function  runServer() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
-  app.use('/', express.static(shapesDir));
+  app.use('/shapes/global', express.static(shapesDir));
 
   app.post('/', (req, res) => {
       let githubPath = req.body.filePath
@@ -42,9 +44,9 @@ async function  runServer() {
   })
   
 
-  http.listen(8080, function () {
+  http.listen(PORT, function () {
     console.log('| System is up and running. Copy the URL below and open this               |');
-    console.log('| in your browser: http://localhost:8080/                                  ');
+    console.log('| in your browser: http://localhost:'+PORT+'/                                  ');
     console.log("============================================================================")
   });
 }
