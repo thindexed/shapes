@@ -31,7 +31,7 @@ module.exports = {
     let repoData ={
       owner:GITHUB_ORG,
       repo:GITHUB_REPO,
-      path: path.join('src', "web", githubPath)
+      path: path.join('src', "shapes", githubPath)
     }
 
     console.log(repoData)
