@@ -67,6 +67,7 @@ async function  runServer() {
       // commit the shape to the connected github backend
       // (if configured)
       update.commitShape(githubPath, reason, content)
+      res.status(200).send('ok');
   })
   
 
