@@ -124,20 +124,27 @@ module.exports = {
 
       console.log("writing files to disc....", jsAbsolutePath)
       fs.writeFileSync(jsAbsolutePath, jsCode, 'utf8');
-      await github.commitFile(jsRelativePath, reason,  Buffer.from(jsCode).toString("base64"))
+      // await github.commitFile(jsRelativePath, reason,  Buffer.from(jsCode).toString("base64"))
 
       console.log("writing files to disc....", customAbsolutePath)
       fs.writeFileSync(customAbsolutePath, customCode, 'utf8');
-      await github.commitFile(customRelativePath, reason,  Buffer.from(customCode).toString("base64"))
+      // await github.commitFile(customRelativePath, reason,  Buffer.from(customCode).toString("base64"))
 
       console.log("writing files to disc....", markdownAbsolutePath)
       fs.writeFileSync(markdownAbsolutePath, markdown, 'utf8');
-      await github.commitFile(markdownRelativePath, reason,  Buffer.from(markdown).toString("base64"))
+      // await github.commitFile(markdownRelativePath, reason,  Buffer.from(markdown).toString("base64"))
 
       console.log("writing files to disc....", pngAbsolutePath)
       fs.writeFileSync(pngAbsolutePath, Buffer.from(img, 'base64'), 'binary');
-      await github.commitFile(pngRelativePath, reason,  Buffer.from(img, 'base64').toString("base64"))
+      // await github.commitFile(pngRelativePath, reason,  Buffer.from(img, 'base64').toString("base64"))
 
+      github.commit([
+        { path: jsRelativePath, content: jsCode },
+        { path: customRelativePath,content: customCode },
+        { path: markdownRelativePath,content: markdown },
+        { path: pngRelativePath, content: img}
+        ], reason)
+      
       console.log("done")
 
       if(!DEBUGGING) {
