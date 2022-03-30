@@ -15,7 +15,10 @@ spec:
     spec:
       containers:
       - name: shapes
-        image: docker.io/freegroup/thindexed-shapes:0.1.0-54
+        image: docker.io/freegroup/thindexed-shapes:0.1.0-58
         envFrom:
         - secretRef:
             name: github-secrets
+        env:
+        - name: DESIGNER_URL
+          value: "http://designer:80/"
