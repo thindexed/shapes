@@ -200,7 +200,7 @@ var circuit_74LSXX_74LS90 = CircuitFigure.extend({
        
        // Label
        shape = this.canvas.paper.text(0,0,'74LS90');
-       shape.attr({"x":9.5859375,"y":152.2501000000002,"text-anchor":"start","text":"74LS90","font-family":"\"Arial\"","font-size":13,"stroke":"#000000","fill":"#080808","stroke-scale":true,"font-weight":"normal","stroke-width":0,"opacity":1});
+       shape.attr({"x":7.5859375,"y":152.2501000000002,"text-anchor":"start","text":"74LS90","font-family":"\"Arial\"","font-size":13,"stroke":"#000000","fill":"#080808","stroke-scale":true,"font-weight":"normal","stroke-width":0,"opacity":1});
        shape.data("name","Label");
        
 
