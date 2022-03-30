@@ -25,7 +25,6 @@ module.exports = {
       return
     }
 
-    message = message || "-empty-"
     content = Buffer.from(content).toString("base64")
 
     let repoData ={
@@ -34,7 +33,6 @@ module.exports = {
       path: path.join('src', "shapes", githubPath)
     }
 
-    console.log(repoData)
     octo.repos.getContent(repoData)
       .then( (res) => {
         octo.repos.createOrUpdateFileContents(Object.assign(repoData, {

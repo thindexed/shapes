@@ -4,9 +4,9 @@ const express = require('express')
 const app = express()
 const http = require('http').Server(app)
 const bodyParser = require('body-parser')
-const github = require("./github")
-const {thumbnail} = require("./thumbnail")
-const {createFolder, renameFile, deleteFile, listFiles, getJSONFile, getBase64Image } = require("./utils/file")
+const github = require("./utils/github")
+const generator = require("./generator")
+const {createFolder, renameFile, deleteFile, listFiles, writeFile, getJSONFile, getBase64Image } = require("./utils/file")
 const shapesDir = path.normalize(__dirname + '/../shapes/')
 
 const PORT = process.env.PORT || 8080
@@ -56,21 +56,24 @@ async function  runServer() {
   app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => createFolder(shapesDir, req.body.filePath, res))
   
   app.post('/shapes/global/save', (req, res) => {
-      let githubPath = req.body.filePath
+      let shapeRelativePath = req.body.filePath
       let content = req.body.content
-      let reason = req.body.commitMessage
-      // create the js/png/md async to avoid a blocked UI
-      //
-      thumbnail(shapesDir, githubPath)
+      let reason = req.body.commitMessage || "-empty-"
 
-      // commit the shape to the connected github backend
-      github.commitShape(githubPath, reason, content)
-      res.status(200).send('ok');
+      writeFile(shapesDir, shapeRelativePath, content, res, ()=>{
+          // create the js/png/md async to avoid a blocked UI
+          //
+          generator.thumbnail(shapesDir, shapeRelativePath)
+
+          // commit the shape to the connected github backend
+          github.commitShape(shapeRelativePath, reason, content)
+      })
   })
   
 
   http.listen(PORT, function () {
-    console.log('| System is up and running on http://localhost:'+PORT+'/                                  ');
+    console.log("============================================================================")
+    console.log('| System is up and running on http://localhost:'+PORT+'/                    ');
     console.log("============================================================================")
   });
 }

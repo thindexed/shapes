@@ -1,6 +1,4 @@
 //app.fileNew();
-console.log("app: ", app!=null)
-console.log("app.view: ", app.view)
 app.view.clear()
 var reader = new draw2d.io.json.Reader();
 reader.unmarshal(app.view,json);

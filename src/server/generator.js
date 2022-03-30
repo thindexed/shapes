@@ -58,13 +58,13 @@ module.exports = {
     concatFiles(shapeAppDir)
   },
 
-  thumbnail: async (shapesDir, subDir) => {
+  thumbnail: async (shapesDir, shapeRelativePath) => {
 
-    let shapefilePath = path.normalize(shapesDir + subDir)
+    let shapeAbsolutePath = path.normalize(shapesDir + shapeRelativePath)
 
     try {
-      let json = JSON.parse(fs.readFileSync(shapefilePath,'utf8'));
-      let pkg = fileToPackage(shapefilePath);
+      let json = JSON.parse(fs.readFileSync(shapeAbsolutePath,'utf8'));
+      let pkg = fileToPackage(shapeAbsolutePath);
 
       json = json.draw2d
       json = JSON.stringify(json, undefined, 2)
@@ -93,7 +93,6 @@ module.exports = {
       await page.goto(DESIGNER_URL)
       await page.setViewport({width: 900, height: 1024})
       await page.waitForFunction(() => {
-        console.log('app' in window)
         return 'app' in window && app != null
       })
       await page.mainFrame().evaluate(injectedCode)
@@ -102,14 +101,14 @@ module.exports = {
       })
 
       let jsCode = await page.evaluate(() => { return code });
-      let customCode =await page.evaluate(() => { return customCode; });
-      let markdown = await page.evaluate(() => { return markdown; });
-      let img = await page.evaluate(() => { return img;});
+      let customCode = await page.evaluate(() => { return customCode });
+      let markdown = await page.evaluate(() => { return markdown });
+      let img = await page.evaluate(() => { return img });
 
-      let pngFilePath = shapefilePath.replace(/\.shape$/, ".png");
-      let jsFilePath = shapefilePath.replace(/\.shape$/, ".js");
-      let customFilePath = shapefilePath.replace(/\.shape$/, ".custom");
-      let markdownFilePath = shapefilePath.replace(/\.shape$/, ".md");
+      let pngFilePath = shapeAbsolutePath.replace(/\.shape$/, ".png");
+      let jsFilePath = shapeAbsolutePath.replace(/\.shape$/, ".js");
+      let customFilePath = shapeAbsolutePath.replace(/\.shape$/, ".custom");
+      let markdownFilePath = shapeAbsolutePath.replace(/\.shape$/, ".md");
 
       // replace the generated "testShape" with the real figure name
       //
