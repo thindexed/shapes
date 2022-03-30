@@ -18,7 +18,7 @@
   "dependencies": {
     "@octokit/rest": "^18.12.0",
     "body-parser": "1.18.3",
-    "express": "4.16.3",
+    "express": "^4.17.3",
     "fs-extra": "^10.0.1",
     "glob": "^7.0.3",
     "make-dir": "^3.1.0",
