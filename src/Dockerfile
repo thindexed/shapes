@@ -1,7 +1,7 @@
 FROM --platform=linux/amd64 node:17-alpine
 
 WORKDIR /app
-RUN apk add g++ make python3
+RUN apk add chromium
 
 COPY shapes ./shapes
 COPY server ./server

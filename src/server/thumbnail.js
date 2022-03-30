@@ -8,6 +8,7 @@ const thisDir = path.normalize(__dirname)
 const shapeAppDir = path.normalize(__dirname + '/../../repository/shapes/')
 const version =  process.env.VERSION || "local-version"
 const DESIGNER_URL =  process.env.DESIGNER_URL || "http://localhost:3000"
+const IN_K8S = process.env.KUBERNETES_SERVICE_HOST? true : false
 
 function fileToPackage(file) {
   return file
@@ -76,7 +77,11 @@ module.exports = {
         code;
 
       //console.log(injectedCode)
-      let browser = await puppeteer.launch( DEBUGGING ? { headless: false, devtools: true,slowMo: 250}: {})
+      let browser = null
+      if ( IN_K8S)
+        browser = await puppeteer.launch({args:['--no-sandbox'], executablePath:'chromium-browser'})
+      else
+        browser = await puppeteer.launch( DEBUGGING ? { headless: false, devtools: true,slowMo: 250}: {})
 
       const page = await browser.newPage()
       page
@@ -85,7 +90,7 @@ module.exports = {
         .on('response', response => console.log(`${response.status()} ${response.url()}`))
         .on('requestfailed', request =>  console.log(`${request.failure().errorText} ${request.url()}`))
           
-      await page.goto('http://localhost:3000/designer')
+      await page.goto(DESIGNER_URL)
       await page.setViewport({width: 900, height: 1024})
       await page.waitForFunction(() => {
         console.log('app' in window)
