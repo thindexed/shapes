@@ -117,11 +117,15 @@ module.exports = {
       jsCode = jsCode.replace(/\$\{VERSION\}/g, version);
       customCode = customCode.replace(/testShape/g, pkg);
 
-      console.log("writing files to disc....", pngFilePath)
+      console.log("writing files to disc....", jsFilePath)
       fs.writeFileSync(jsFilePath, jsCode, 'utf8');
+      console.log("writing files to disc....", customFilePath)
       fs.writeFileSync(customFilePath, customCode, 'utf8');
+      console.log("writing files to disc....", markdownFilePath)
       fs.writeFileSync(markdownFilePath, markdown, 'utf8');
+      console.log("writing files to disc....", pngFilePath)
       fs.writeFileSync(pngFilePath, Buffer.from(img, 'base64'), 'binary');
+      console.log("done")
 
       if(!DEBUGGING) {
         browser.close()
