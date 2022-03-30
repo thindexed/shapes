@@ -81,7 +81,12 @@ module.exports = {
       let browser = null
       if (IN_K8S) {
         console.log("Running in K8S environment")
-        browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'], executablePath:'chromium-browser'})
+        browser = await puppeteer.launch({ headless: true, args: [
+          "--disable-gpu",
+          "--disable-dev-shm-usage",
+          "--disable-setuid-sandbox",
+          "--no-sandbox",
+        ], executablePath:'chromium-browser'})
       }
       else {
         browser = await puppeteer.launch( DEBUGGING ? { headless: false, devtools: true,slowMo: 250}: {})
@@ -97,6 +102,7 @@ module.exports = {
         .on('requestfailed', request =>  console.log(`${request.failure().errorText} ${request.url()}`))
       */   
       console.log("Navigate to: ", DESIGNER_URL)
+      console.log("Chrome Version: ", await page.browser().version())
       await page.goto(DESIGNER_URL)
       await page.setViewport({width: 1500, height: 2024})
       await page.waitForFunction(() => {
