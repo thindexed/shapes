@@ -1,3 +1,4 @@
+var mv = require('mv');
 const fs = require('fs-extra')
 const glob = require("glob")
 const path = require('path')
@@ -174,7 +175,7 @@ module.exports = {
       res.status(403).send('Unable to rename file')
       return
     }
-    fs.rename(fromDir, toDir, err => {
+    mv(fromDir, toDir, err => {
       if (err) console.log(err)
       let isDir = fs.lstatSync(toDir).isDirectory()
       res.send({
