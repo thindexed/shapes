@@ -22,3 +22,10 @@ spec:
         env:
         - name: DESIGNER_URL
           value: "https://app.<DOMAIN>/designer"
+        resources:
+          limits:
+            cpu: "2"
+            memory: 1Gi
+          requests:
+            cpu: "2"
+            memory: 1Gi
