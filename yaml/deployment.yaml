@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shapes
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: shapes
+  template:
+    metadata:
+      labels:
+        name: shapes
+    spec:
+      containers:
+      - name: shapes
+        image: docker.io/freegroup/thindexed-shapes:0.1.0-129
+        envFrom:
+        - secretRef:
+            name: github-secrets
+        env:
+        - name: DESIGNER_URL
+          value: "https://app.<DOMAIN>/designer"
