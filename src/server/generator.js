@@ -91,6 +91,7 @@ module.exports = {
         .on('response', response => console.log(`${response.status()} ${response.url()}`))
         .on('requestfailed', request =>  console.log(`${request.failure().errorText} ${request.url()}`))
           
+      console.log("Navigate to: ", DESIGNER_URL)
       await page.goto(DESIGNER_URL)
       await page.setViewport({width: 1500, height: 2024})
       await page.waitForFunction(() => {
