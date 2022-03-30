@@ -53,9 +53,8 @@ try {
         };
 
         new draw2d.io.png.Writer().marshal(canvas, function (imageDataUrl, base64) {
-            console.log(imageDataUrl)
             img = base64;
-            //splash.remove();
+            splash.remove();
         }, canvas.getBoundingBox().scale(10, 10));
     });
 }
