@@ -4,8 +4,8 @@ const express = require('express')
 const app = express()
 const http = require('http').Server(app)
 const bodyParser = require('body-parser')
-const github = require("./utils/github")
 const generator = require("./generator")
+const github = require("./utils/github")
 const {createFolder, renameFile, deleteFile, listFiles, writeFile, getJSONFile, getBase64Image } = require("./utils/file")
 const shapesDir = path.normalize(__dirname + '/../shapes/')
 
@@ -19,9 +19,10 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 
 function ensureAdminLoggedIn(options) {
   return function (req, res, next) {
+    console.log(req.headers)
     let role = req.get("x-role")
     if ( role !== "admin") {
-      res.send(401, 'string')
+      res.status(401).send('string')
       return
     }
     next();
@@ -55,23 +56,23 @@ async function  runServer() {
   app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => renameFile(shapesDir, req.body.from, req.body.to, res))
   app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => createFolder(shapesDir, req.body.filePath, res))
   
-  app.post('/shapes/global/save', (req, res) => {
+  app.post('/shapes/global/save', ensureAdminLoggedIn(),  (req, res) => {
       let shapeRelativePath = req.body.filePath
       let content = req.body.content
       let reason = req.body.commitMessage || "-empty-"
 
-      writeFile(shapesDir, shapeRelativePath, content, res, ()=>{
+      writeFile(shapesDir, shapeRelativePath, content, res, async ()=>{
+          await github.commitFile(shapeRelativePath, reason,  Buffer.from(content).toString("base64"))
+
           // create the js/png/md async to avoid a blocked UI
           //
-          generator.thumbnail(shapesDir, shapeRelativePath)
-
-          // commit the shape to the connected github backend
-          github.commitShape(shapeRelativePath, reason, content)
+          generator.thumbnail(shapesDir, shapeRelativePath, reason)
       })
   })
   
 
   http.listen(PORT, function () {
+    generator.generateShapeIndex()
     console.log("============================================================================")
     console.log('| System is up and running on http://localhost:'+PORT+'/                    ');
     console.log("============================================================================")
