@@ -294,6 +294,7 @@ module.exports = {
       if (typeof callback === "function") {
         callback(subDir, err)
       }
+
       res.setHeader('Content-Type', 'application/json')
       res.send({
         name: path.basename(subDir),
@@ -302,6 +303,7 @@ module.exports = {
         type: "file",
         dir: false
       })
+
     })
   }
 }

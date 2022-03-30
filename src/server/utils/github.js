@@ -38,14 +38,14 @@ module.exports = {
     return Promise.all(files.map(function(file) {
       return repo.git.blobs.create({
         content: file.content,
-        encoding: 'utf-8'
+        encoding: 'base64'
       });
     })).then(function(blobs) {
       return fetchTree().then(function(tree) {
         return repo.git.trees.create({
           tree: files.map(function(file, index) {
             return {
-              path: file.path.replace(/^\//, ''),
+              path: path.join('src', "shapes",file.path),
               mode: '100644',
               type: 'blob',
               sha: blobs[index].sha
@@ -58,48 +58,12 @@ module.exports = {
       return repo.git.commits.create({
         message: message,
         tree: tree.sha,
-        parents: [
-          head.object.sha
-        ]
+        parents: [ head.object.sha ]
       });
     }).then(function(commit) {
       return repo.git.refs.heads(GITHUB_BRANCH).update({
         sha: commit.sha
       });
-    });
-  },
-
-  commitFile: function(githubPath, message, base64Content){
-    if(GITHUB_TOKEN === null) {
-      console.log('Upload of Shapes to the Repo is not possible due of missing GITHUB_TOKEN environment variable.')
-      return
-    }
-
-    let repoData ={
-      owner:GITHUB_ORG,
-      repo:GITHUB_REPO,
-      path: path.join('src', "shapes", githubPath)
-    }
-
-    return new Promise((resolve, reject) => {
-      octokit.repos.getContent(repoData)
-        .then( (res) => {
-          octokit.repos.createOrUpdateFileContents(Object.assign(repoData, {
-            sha: res.data.sha,
-            message: message,
-            content: base64Content
-          }))
-          .then( res => { resolve(res) })
-          .catch( error => {reject(error)})
-        })
-        .catch( (error) => {
-          octokit.repos.createOrUpdateFileContents(Object.assign(repoData, {
-            message: message,
-            content: base64Content
-          }))
-          .then( res => { resolve(res) })
-          .catch( error => {reject(error) })
-        })
     });
   }
 }

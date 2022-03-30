@@ -21,7 +21,7 @@ try {
         }
         var splash = $(
             '<div class="overlay-scale">' +
-            '<div id="test_canvas">' +
+            '<div id="test_canvas" style="width:2000; height:2000">' +
             '</div>' +
             '<div>');
 
@@ -31,7 +31,7 @@ try {
         $("body").append(splash);
         var canvas = new draw2d.Canvas("test_canvas");
         var test = eval("new "+pkg+"()");
-        canvas.add(test, 400, 160);
+        canvas.add(test, 400, 60);
         canvas.commonPorts.each(function (i, p) {
             p.setVisible(false);
         });
@@ -53,8 +53,9 @@ try {
         };
 
         new draw2d.io.png.Writer().marshal(canvas, function (imageDataUrl, base64) {
+            console.log(imageDataUrl)
             img = base64;
-            splash.remove();
+            //splash.remove();
         }, canvas.getBoundingBox().scale(10, 10));
     });
 }

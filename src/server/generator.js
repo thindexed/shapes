@@ -59,7 +59,7 @@ module.exports = {
     concatFiles(shapeAppDir)
   },
 
-  thumbnail: async (shapesDir, shapeRelativePath, reason) => {
+  thumbnail: async (shapesDir, shapeRelativePath, shapeCode, reason) => {
 
     let shapeAbsolutePath = path.normalize(shapesDir + shapeRelativePath)
 
@@ -79,7 +79,7 @@ module.exports = {
 
       //console.log(injectedCode)
       let browser = null
-      if ( IN_K8S)
+      if (IN_K8S)
         browser = await puppeteer.launch({args:['--no-sandbox'], executablePath:'chromium-browser'})
       else
         browser = await puppeteer.launch( DEBUGGING ? { headless: false, devtools: true,slowMo: 250}: {})
@@ -92,7 +92,7 @@ module.exports = {
         .on('requestfailed', request =>  console.log(`${request.failure().errorText} ${request.url()}`))
           
       await page.goto(DESIGNER_URL)
-      await page.setViewport({width: 900, height: 1024})
+      await page.setViewport({width: 1500, height: 2024})
       await page.waitForFunction(() => {
         return 'app' in window && app != null
       })
@@ -101,10 +101,10 @@ module.exports = {
         return img !== null
       })
 
+      let img = await page.evaluate(() => { return img });
       let jsCode = await page.evaluate(() => { return code });
       let customCode = await page.evaluate(() => { return customCode });
       let markdown = await page.evaluate(() => { return markdown });
-      let img = await page.evaluate(() => { return img });
 
       let pngRelativePath = shapeRelativePath.replace(/\.shape$/, ".png");
       let jsRelativePath = shapeRelativePath.replace(/\.shape$/, ".js");
@@ -124,24 +124,22 @@ module.exports = {
 
       console.log("writing files to disc....", jsAbsolutePath)
       fs.writeFileSync(jsAbsolutePath, jsCode, 'utf8');
-      // await github.commitFile(jsRelativePath, reason,  Buffer.from(jsCode).toString("base64"))
 
       console.log("writing files to disc....", customAbsolutePath)
       fs.writeFileSync(customAbsolutePath, customCode, 'utf8');
-      // await github.commitFile(customRelativePath, reason,  Buffer.from(customCode).toString("base64"))
 
       console.log("writing files to disc....", markdownAbsolutePath)
       fs.writeFileSync(markdownAbsolutePath, markdown, 'utf8');
-      // await github.commitFile(markdownRelativePath, reason,  Buffer.from(markdown).toString("base64"))
 
       console.log("writing files to disc....", pngAbsolutePath)
       fs.writeFileSync(pngAbsolutePath, Buffer.from(img, 'base64'), 'binary');
-      // await github.commitFile(pngRelativePath, reason,  Buffer.from(img, 'base64').toString("base64"))
 
       github.commit([
-        { path: jsRelativePath, content: jsCode },
-        { path: customRelativePath,content: customCode },
-        { path: markdownRelativePath,content: markdown },
+        { path: shapeRelativePath, content: Buffer.from(shapeCode).toString("base64") },
+        { path: jsRelativePath, content: Buffer.from(jsCode).toString("base64") },
+        { path: jsRelativePath, content: Buffer.from(jsCode).toString("base64") },
+        { path: customRelativePath,content: Buffer.from(customCode).toString("base64") },
+        { path: markdownRelativePath,content: Buffer.from(markdown).toString("base64") },
         { path: pngRelativePath, content: img}
         ], reason)
       

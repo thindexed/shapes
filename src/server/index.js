@@ -62,12 +62,8 @@ async function  runServer() {
       let content = req.body.content
       let reason = req.body.commitMessage || "-empty-"
 
-      writeFile(shapesDir, shapeRelativePath, content, res, async ()=>{
-          await github.commitFile(shapeRelativePath, reason,  Buffer.from(content).toString("base64"))
-
-          // create the js/png/md async to avoid a blocked UI
-          //
-          generator.thumbnail(shapesDir, shapeRelativePath, reason)
+      writeFile(shapesDir, shapeRelativePath, content, res, async (sanitizedRelativePath)=>{
+          generator.thumbnail(shapesDir, sanitizedRelativePath, content, reason)
       })
   })
   
