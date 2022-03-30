@@ -80,7 +80,7 @@ module.exports = {
       //console.log(injectedCode)
       let browser = null
       if (IN_K8S)
-        browser = await puppeteer.launch({args:['--no-sandbox'], executablePath:'chromium-browser'})
+        browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'], executablePath:'chromium-browser'})
       else
         browser = await puppeteer.launch( DEBUGGING ? { headless: false, devtools: true,slowMo: 250}: {})
 
