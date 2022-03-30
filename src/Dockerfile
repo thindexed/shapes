@@ -10,13 +10,13 @@ COPY package-lock.json .
 
 RUN npm install
 
-RUN addgroup beaker && \
-    adduser --gecos "" --ingroup beaker --disabled-password beaker
+#RUN addgroup beaker && \
+#    adduser --gecos "" --ingroup beaker --disabled-password beaker
 
-RUN chown -R beaker:beaker /app
-RUN chmod 755 /app
+#RUN chown -R beaker:beaker /app
+#RUN chmod 755 /app
 
-USER beaker:beaker
+#USER beaker:beaker
 
 
 ENTRYPOINT ["node", "server/index.js"]
