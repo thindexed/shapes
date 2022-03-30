@@ -19,7 +19,6 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 
 function ensureAdminLoggedIn(options) {
   return function (req, res, next) {
-    console.log(req.headers)
     let role = req.get("x-role")
     if ( role !== "admin") {
       res.status(401).send('string')

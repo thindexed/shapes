@@ -79,18 +79,22 @@ module.exports = {
 
       //console.log(injectedCode)
       let browser = null
-      if (IN_K8S)
+      if (IN_K8S) {
+        console.log("Running in K8S environment")
         browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'], executablePath:'chromium-browser'})
-      else
+      }
+      else {
         browser = await puppeteer.launch( DEBUGGING ? { headless: false, devtools: true,slowMo: 250}: {})
+      }
 
       const page = await browser.newPage()
+      /*
       page
         .on('console', message => console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
         .on('pageerror', ({ message }) => console.log(message))
         .on('response', response => console.log(`${response.status()} ${response.url()}`))
         .on('requestfailed', request =>  console.log(`${request.failure().errorText} ${request.url()}`))
-          
+      */   
       console.log("Navigate to: ", DESIGNER_URL)
       await page.goto(DESIGNER_URL)
       await page.setViewport({width: 1500, height: 2024})
