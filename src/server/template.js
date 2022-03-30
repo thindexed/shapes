@@ -21,7 +21,7 @@ try {
         }
         var splash = $(
             '<div class="overlay-scale">' +
-            '<div id="test_canvas" style="width:700; height:7000">' +
+            '<div id="test_canvas" >' +
             '</div>' +
             '<div>');
 
