@@ -4,13 +4,12 @@ const express = require('express')
 const app = express()
 const http = require('http').Server(app)
 const bodyParser = require('body-parser')
-const update = require("./update")
+const github = require("./github")
 const {thumbnail} = require("./thumbnail")
-const {listFiles, getJSONFile, getBase64Image } = require("./utils/file")
+const {createFolder, renameFile, deleteFile, listFiles, getJSONFile, getBase64Image } = require("./utils/file")
 const shapesDir = path.normalize(__dirname + '/../shapes/')
 
 const PORT = process.env.PORT || 8080
-
 console.log(shapesDir)
 
 // Tell the bodyparser middleware to accept more data
@@ -47,14 +46,14 @@ async function  runServer() {
   app.get('/shapes/global/get', (req, res) => getJSONFile(shapesDir, req.query.filePath, res))
   app.get('/shapes/global/image', (req, res) => getBase64Image(shapesDir, req.query.filePath, res))
   app.post('/shapes/global/delete', ensureAdminLoggedIn(), (req, res) => {
-    module.exports.deleteFile(shapesDir, req.body.filePath)
-    module.exports.deleteFile(shapesDir, req.body.filePath.replace(".shape", ".js"))
-    module.exports.deleteFile(shapesDir, req.body.filePath.replace(".shape", ".md"))
-    module.exports.deleteFile(shapesDir, req.body.filePath.replace(".shape", ".custom"))
-    module.exports.deleteFile(shapesDir, req.body.filePath.replace(".shape", ".png"), res)
+    deleteFile(shapesDir, req.body.filePath)
+    deleteFile(shapesDir, req.body.filePath.replace(".shape", ".js"))
+    deleteFile(shapesDir, req.body.filePath.replace(".shape", ".md"))
+    deleteFile(shapesDir, req.body.filePath.replace(".shape", ".custom"))
+    deleteFile(shapesDir, req.body.filePath.replace(".shape", ".png"), res)
   })
-  app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => module.exports.renameFile(shapesDir, req.body.from, req.body.to, res))
-  app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => module.exports.createFolder(shapesDir, req.body.filePath, res))
+  app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => renameFile(shapesDir, req.body.from, req.body.to, res))
+  app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => createFolder(shapesDir, req.body.filePath, res))
   
   app.post('/shapes/global/save', (req, res) => {
       let githubPath = req.body.filePath
@@ -62,11 +61,10 @@ async function  runServer() {
       let reason = req.body.commitMessage
       // create the js/png/md async to avoid a blocked UI
       //
-      //thumbnail(baseDir, githubPath)
+      thumbnail(shapesDir, githubPath)
 
       // commit the shape to the connected github backend
-      // (if configured)
-      update.commitShape(githubPath, reason, content)
+      github.commitShape(githubPath, reason, content)
       res.status(200).send('ok');
   })
   

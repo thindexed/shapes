@@ -7,6 +7,7 @@ const glob = require("glob")
 const thisDir = path.normalize(__dirname)
 const shapeAppDir = path.normalize(__dirname + '/../../repository/shapes/')
 const version =  process.env.VERSION || "local-version"
+const DESIGNER_URL =  process.env.DESIGNER_URL || "http://localhost:3000"
 
 function fileToPackage(file) {
   return file
@@ -56,9 +57,9 @@ module.exports = {
     concatFiles(shapeAppDir)
   },
 
-  thumbnail: async (baseDir, subDir) => {
+  thumbnail: async (shapesDir, subDir) => {
 
-    let shapefilePath = path.normalize(baseDir + subDir)
+    let shapefilePath = path.normalize(shapesDir + subDir)
 
     try {
       let json = JSON.parse(fs.readFileSync(shapefilePath,'utf8'));

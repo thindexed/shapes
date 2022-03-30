@@ -19,3 +19,6 @@ spec:
         envFrom:
         - secretRef:
             name: github-secrets
+        env:
+        - name: DESIGNER_URL
+          value: "http://designer:80/"
