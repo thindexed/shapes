@@ -94,13 +94,13 @@ module.exports = {
 
       const page = await browser.newPage()
       console.log(page)
-      /* 
+      
       page
         .on('console', message => console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
         .on('pageerror', ({ message }) => console.log(message))
         .on('response', response => console.log(`${response.status()} ${response.url()}`))
         .on('requestfailed', request =>  console.log(`${request.failure().errorText} ${request.url()}`))
-      */   
+       
       console.log("Navigate to: ", DESIGNER_URL)
       console.log("Chrome Version: ", await page.browser().version())
       await page.goto(DESIGNER_URL)
