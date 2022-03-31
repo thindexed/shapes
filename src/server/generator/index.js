@@ -6,7 +6,8 @@ const fs = require("fs")
 const glob = require("glob")
 const github = require("../utils/github")
 const thisDir = path.normalize(__dirname)
-const shapeAppDir = path.normalize(__dirname + '/../shapes/')
+
+const shapeAppDir = path.normalize(__dirname + '/../../shapes/')
 const version =  process.env.VERSION || "local-version"
 const DESIGNER_URL =  process.env.DESIGNER_URL || "http://localhost:3000"
 const IN_K8S = process.env.KUBERNETES_SERVICE_HOST? true : false
