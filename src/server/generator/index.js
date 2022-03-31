@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer')
 const path = require("path")
 const fs = require("fs")
 const glob = require("glob")
-const github = require("./utils/github")
+const github = require("../utils/github")
 const thisDir = path.normalize(__dirname)
 const shapeAppDir = path.normalize(__dirname + '/../shapes/')
 const version =  process.env.VERSION || "local-version"
@@ -72,7 +72,6 @@ module.exports = {
 
       let code = fs.readFileSync(thisDir + "/template.js", 'utf8');
       let injectedCode =
-        "console.log('test test... ');\n" +
         "let json=" + json + ";\n" +
         "let pkg='" + pkg + "';\n" +
         code;

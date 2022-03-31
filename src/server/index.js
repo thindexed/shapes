@@ -5,12 +5,12 @@ const app = express()
 const http = require('http').Server(app)
 const bodyParser = require('body-parser')
 const generator = require("./generator")
-const github = require("./utils/github")
-const {createFolder, renameFile, deleteFile, listFiles, writeFile, getJSONFile, getBase64Image } = require("./utils/file")
-const shapesDir = path.normalize(__dirname + '/../shapes/')
+const persistence = require("./utils/file")
+
+const documentBaseDir = path.normalize(__dirname + '/../shapes/')
 
 const PORT = process.env.PORT || 8080
-console.log(shapesDir)
+
 
 // Tell the bodyparser middleware to accept more data
 //
@@ -38,31 +38,33 @@ function ensureAdminLoggedIn(options) {
 async function  runServer() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
-  app.use('/shapes/global', express.static(shapesDir));
+  app.use('/shapes/global', express.static(documentBaseDir));
 
 
   // TODO: migrate to REST service API
-  app.get('/shapes/global/list', (req, res) => listFiles(shapesDir, req.query.path, res))
-  app.get('/shapes/global/get', (req, res) => getJSONFile(shapesDir, req.query.filePath, res))
-  app.get('/shapes/global/image', (req, res) => getBase64Image(shapesDir, req.query.filePath, res))
-
-  app.post('/shapes/global/delete', ensureAdminLoggedIn(), (req, res) => {
-    deleteFile(shapesDir, req.body.filePath)
-    deleteFile(shapesDir, req.body.filePath.replace(".shape", ".js"))
-    deleteFile(shapesDir, req.body.filePath.replace(".shape", ".md"))
-    deleteFile(shapesDir, req.body.filePath.replace(".shape", ".custom"))
-    deleteFile(shapesDir, req.body.filePath.replace(".shape", ".png"), res)
+  app.get('/shapes/global/list', (req, res) => persistence.listFiles(documentBaseDir, req.query.path, res))
+  app.get('/shapes/global/get', (req, res) => persistence.getJSONFile(documentBaseDir, req.query.filePath, res))
+  app.get('/shapes/global/image', (req, res) => {
+    persistence.getBinaryFile(documentBaseDir, req.query.filePath, res)
   })
 
-  app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => renameFile(shapesDir, req.body.from, req.body.to, res))
-  app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => createFolder(shapesDir, req.body.filePath, res))
+  app.post('/shapes/global/delete', ensureAdminLoggedIn(), (req, res) => {
+    persistence.deleteFile(documentBaseDir, req.body.filePath)
+    persistence.deleteFile(documentBaseDir, req.body.filePath.replace(".shape", ".js"))
+    persistence.deleteFile(documentBaseDir, req.body.filePath.replace(".shape", ".md"))
+    persistence.deleteFile(documentBaseDir, req.body.filePath.replace(".shape", ".custom"))
+    persistence.deleteFile(documentBaseDir, req.body.filePath.replace(".shape", ".png"), res)
+  })
+
+  app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => persistence.renameFile(documentBaseDir, req.body.from, req.body.to, res))
+  app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => persistence.createFolder(documentBaseDir, req.body.filePath, res))
   app.post('/shapes/global/save', ensureAdminLoggedIn(),  (req, res) => {
       let shapeRelativePath = req.body.filePath
       let content = req.body.content
       let reason = req.body.commitMessage || "-empty-"
 
-      writeFile(shapesDir, shapeRelativePath, content, res, async (sanitizedRelativePath)=>{
-          generator.thumbnail(shapesDir, sanitizedRelativePath, content, reason)
+      persistence.writeFile(documentBaseDir, shapeRelativePath, content, res, async (sanitizedRelativePath)=>{
+          generator.thumbnail(documentBaseDir, sanitizedRelativePath, content, reason)
       })
   })
   

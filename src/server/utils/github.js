@@ -1,9 +1,6 @@
 const path = require('path')
-
-const { Octokit } = require("@octokit/rest")
 var Octokat = require('octokat');
 
-let octokit = null
 let octokat = null
 let repo = null
 
@@ -16,7 +13,6 @@ if(GITHUB_TOKEN === null) {
   console.log('Upload of Shapes to the Repo is not possible due of missing GITHUB_TOKEN environment variable.')
 }
 else {
-  octokit = new Octokit({ auth: GITHUB_TOKEN })
   octokat = new Octokat({ token: GITHUB_TOKEN});
   repo = octokat.repos(GITHUB_ORG, GITHUB_REPO);
 }

@@ -1,4 +1,4 @@
-var mv = require('mv');
+const mv = require('mv');
 const fs = require('fs-extra')
 const glob = require("glob")
 const path = require('path')
@@ -12,9 +12,17 @@ module.exports = {
   listFiles: function (baseDir, subDir, res) {
     let listDir = path.join(baseDir, subDir)
 
+    if (listDir !== sanitize(listDir)) {
+      console.log("'sanitize' directory name is different from original directory name")
+      res.status(403).send('Unable to read image')
+      return
+    }
+
+    // a directory must always end with a trailing "/"
     if(!listDir.endsWith(path.sep))
       listDir = listDir+path.sep
 
+    // a directory must always end with a trailing "/"
     if(!subDir.endsWith(path.sep))
       subDir = subDir+path.sep
 
@@ -45,6 +53,12 @@ module.exports = {
 
   getJSONFile: function (baseDir, subDir, res) {
     let file = path.join(baseDir, subDir)
+    
+    if (file !== sanitize(file)) {
+      console.log("'sanitize' filepath is different from the original")
+      res.status(403).send('Unable to read file')
+      return
+    }
 
     if (file !== path.normalize(file)) {
       console.log("'toDir' path with dots")
@@ -76,8 +90,14 @@ module.exports = {
     }
   },
 
-  getBase64Image: function (baseDir, subDir, res) {
+  getBinaryFile: function (baseDir, subDir, res) {
     let file = path.join(baseDir, subDir)
+
+    if (file !== sanitize(file)) {
+      console.log("'sanitize' filepath is different from the original")
+      res.status(403).send('Unable to read image')
+      return
+    }
 
     if (file !== path.normalize(file)) {
       console.log("'toDir' path with dots")
@@ -97,9 +117,8 @@ module.exports = {
       return
     }
     try {
-      let pngFile = file.replace(".shape",".png").replace(".brain",".png")
-      if(fs.existsSync(pngFile)) {
-        fs.readFile(pngFile, (err, data) => {
+       if(fs.existsSync(file)) {
+        fs.readFile(file, (err, data) => {
           res.writeHead(200, {'Content-Type': 'image/png'})
           res.end(data)
         })
@@ -140,6 +159,12 @@ module.exports = {
     let toDir = path.join(baseDir, to)
     let fromDirParent = path.dirname(fromDir)
     let toDirParent = path.dirname(toDir)
+
+    if (fromDir !== sanitize(fromDir)) {
+      console.log("'sanitize' fromDir is different from the original")
+      res.status(403).send('Unable to rename image')
+      return
+    }
 
     // "from" must be exists
     if (!fs.existsSync(fromDir)) {
@@ -200,6 +225,13 @@ module.exports = {
     let file = path.join(baseDir, subDir)
     // check that the normalize path is the same as the concatenated. It is possible that these are not the same
     // if the "subDir" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
+
+    if (file !== sanitize(file)) {
+      console.log("'sanitize' file name is different from the original")
+      res.status(403).send('Unable to delete file')
+      return
+    }
+
     if (file !== path.normalize(file)) {
       console.log("'file' path with dots")
       if(res) res.status(403).send('Unable to delete file')
@@ -225,9 +257,13 @@ module.exports = {
 
 
   createFolder: function (baseDir, subDir, res) {
-    subDir = sanitize(subDir)
-
     let directory = path.join(baseDir, subDir)
+
+    if (directory !== sanitize(directory)) {
+      console.log("'sanitize' directory name is different from the original")
+      res.status(403).send('Unable to create folder')
+      return
+    }
 
     // check that the normalize path is the same as the concatenated. It is possible that these are not the same
     // if the "subDir" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
