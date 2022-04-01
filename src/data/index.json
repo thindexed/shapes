@@ -544,32 +544,6 @@
     "image": "circuit/digital/timer/Delay.png"
   },
   {
-    "name": "documentation_Markdown",
-    "tags": [
-      "documentation",
-      "Markdown"
-    ],
-    "version": "local-version",
-    "basename": "Markdown.js",
-    "displayName": "Markdown",
-    "basedir": "documentation",
-    "filePath": "documentation/Markdown.shape",
-    "image": "documentation/Markdown.png"
-  },
-  {
-    "name": "documentation_Text",
-    "tags": [
-      "documentation",
-      "Text"
-    ],
-    "version": "local-version",
-    "basename": "Text.js",
-    "displayName": "Text",
-    "basedir": "documentation",
-    "filePath": "documentation/Text.shape",
-    "image": "documentation/Text.png"
-  },
-  {
     "name": "hardware_arduino_Arduino",
     "tags": [
       "hardware",
@@ -610,20 +584,6 @@
     "basedir": "hardware/raspi",
     "filePath": "hardware/raspi/GPIORead.shape",
     "image": "hardware/raspi/GPIORead.png"
-  },
-  {
-    "name": "hardware_raspi_GPIOWrite",
-    "tags": [
-      "hardware",
-      "raspi",
-      "GPIOWrite"
-    ],
-    "version": "local-version",
-    "basename": "GPIOWrite.js",
-    "displayName": "GPIOWrite",
-    "basedir": "hardware/raspi",
-    "filePath": "hardware/raspi/GPIOWrite.shape",
-    "image": "hardware/raspi/GPIOWrite.png"
   },
   {
     "name": "hardware_raspi_PCA9685Motor",

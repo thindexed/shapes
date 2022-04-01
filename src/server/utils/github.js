@@ -41,7 +41,7 @@ module.exports = {
         return repo.git.trees.create({
           tree: files.map(function(file, index) {
             return {
-              path: path.join('src', "shapes",file.path),
+              path: path.join('src', "data",file.path),
               mode: '100644',
               type: 'blob',
               sha: blobs[index].sha
@@ -61,5 +61,36 @@ module.exports = {
         sha: commit.sha
       });
     });
+  },
+
+  delete: function(files, message) {
+    return fetchTree()
+      .then((tree) => {
+        console.log(tree)
+        return repo.git.trees.create({
+          tree: files.map(function(file) {
+            return {
+              path: path.join('src', "data",file.path),
+              mode: '100644',
+              type: 'blob',
+              sha: null
+            };
+          }),
+          base_tree: tree.sha
+        });
+      })
+      .then((tree) => {
+        return repo.git.commits.create({
+          message: message,
+          tree: tree.sha,
+          parents: [ head.object.sha ]
+        });
+      })
+      .then((commit) => {
+        return repo.git.refs.heads(GITHUB_BRANCH).update({
+          sha: commit.sha
+        });
+      })
   }
+
 }
