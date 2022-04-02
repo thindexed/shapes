@@ -80,7 +80,7 @@ async function  runServer() {
       toRelativePath =  path.join('src', "data", toRelativePath)
 
       if(isDir ){
-        github.renameDirectory(fromRelativePath, toRelativePath, "-rename")
+        github.renameDirectory(fromRelativePath, toRelativePath, "-rename-").catch( error => { console.log(error)})
       }
       else {
         let fromFiles = [

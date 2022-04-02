@@ -10,7 +10,7 @@ RUN apk add --no-cache \
       ca-certificates \
       ttf-freefont
 
-COPY shapes ./shapes
+COPY data ./data
 COPY server ./server
 COPY package.json .
 COPY package-lock.json .
@@ -28,14 +28,6 @@ RUN addgroup -S beaker && adduser -S -G beaker beaker \
 
 # Run everything after as non-privileged user.
 USER beaker:beaker
-
-#RUN addgroup beaker && \
-#    adduser --gecos "" --ingroup beaker --diabled-password beaker
-
-#RUN chown -R beaker:beaker /app
-#RUN chmod 755 /app
-
-#USER beaker:beaker
 
 
 ENTRYPOINT ["node", "server/index.js"]

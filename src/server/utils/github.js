@@ -142,17 +142,26 @@ module.exports = {
       return repo.contents(parentDir).fetch()
     }).then(function(infos) {
       let item = infos.items.find( item => item.path===fromDir )
+      if(!item) {
+        throw "not found"
+      }
       dirSha = item.sha
       return repo.git.trees(dirSha).fetch({recursive:true});
     }).then(function({tree}) {
+      // create the "tree" with "sha:null" to delete all files below the old directory
+      //
       const newTree = tree.filter(({ type }) => type === TYPE.BLOB)
                               .map(({ path, mode, type }) => ( { path: `${fromDir}/${path}`, sha: null, mode, type }));
+      // create a tree with the sha of the delete directory....inherits the content.
+      //
       newTree.push( {
         path: toDir,
         mode: '040000',
         type: TYPE.TREE,
         sha: dirSha
       })
+      // create the new folder and delte the files in the old folder.
+      //
       return repo.git.trees.create({
         tree: newTree,
         base_tree: parentSha
@@ -167,6 +176,6 @@ module.exports = {
       return repo.git.refs.heads(GITHUB_BRANCH).update({
         sha: commit.sha
       });
-    });
+    })
   }
 }
