@@ -10,6 +10,7 @@ const GITHUB_ORG = process.env.GITHUB_ORG || 'thindexed'
 const GITHUB_REPO = process.env.GITHUB_REPO || 'shapes'
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || null
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main'
+const TYPE = { BLOB: 'blob', TREE: 'tree' };
 
 if(GITHUB_TOKEN === null) {
   console.log('Upload of Shapes to the Repo is not possible due of missing GITHUB_TOKEN environment variable.')
@@ -134,16 +135,21 @@ module.exports = {
 
   renameDirectory: async function(fromDir, toDir, message) {
     let parentDir = path.dirname(fromDir)
-    return repo.contents(parentDir).fetch()
-    .then(function(infos) {
+    let parentSha = null
+    return fetchTree().then( (tree) => {
+      parentSha = tree.sha
+      return repo.contents(parentDir).fetch()
+    }).then(function(infos) {
       let item = infos.items.find( item => item.path===fromDir )
       console.log(item.sha) 
       return repo.git.trees(item.sha).fetch({recursive:true});
-    }).then(function(tree) {
-      console.log(tree)
+    }).then(function({tree}) {
+      const newTree = tree.filter(({ type }) => type === TYPE.BLOB)
+                              .map(({ path, mode, type }) => ( { path: `${fromDir}/${path}`, sha: null, mode, type }));
+      console.log(newTree)
       return repo.git.trees.create({
-        tree: [],
-        base_tree: tree.sha
+        tree: newTree,
+        base_tree: parentSha
       });
     }).then(function(tree) {
       return repo.git.commits.create({
