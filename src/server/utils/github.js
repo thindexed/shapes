@@ -133,7 +133,7 @@ module.exports = {
     });
   },
 
-  renameDirectory: async function(fromDir, toDir, message) {
+  renameDirectory: function(fromDir, toDir, message) {
     let parentDir = path.dirname(fromDir)
     let parentSha = null
     let dirSha = null
@@ -164,6 +164,39 @@ module.exports = {
       //
       return repo.git.trees.create({
         tree: newTree,
+        base_tree: parentSha
+      });
+    }).then(function(tree) {
+      return repo.git.commits.create({
+        message: message,
+        tree: tree.sha,
+        parents: [ head.object.sha ]
+      });
+    }).then(function(commit) {
+      return repo.git.refs.heads(GITHUB_BRANCH).update({
+        sha: commit.sha
+      });
+    })
+  },
+
+  deleteDirectory: function(director, message) {
+    let parentDir = path.dirname(director)
+    let parentSha = null
+    return fetchTree().then( (tree) => {
+      parentSha = tree.sha
+      return repo.contents(parentDir).fetch()
+    }).then(function(infos) {
+      let item = infos.items.find( item => item.path===director )
+      if(!item) {
+        throw "not found"
+      }
+      return repo.git.trees(item.sha).fetch({recursive:true});
+    }).then(function({tree}) {
+      // delete the files in the folder. Empty folders are deleted by github.
+      //
+      return repo.git.trees.create({
+        tree: tree.filter(({ type }) => type === TYPE.BLOB)
+                  .map(({ path, mode, type }) => ( { path: `${director}/${path}`, sha: null, mode, type })),
         base_tree: parentSha
       });
     }).then(function(tree) {

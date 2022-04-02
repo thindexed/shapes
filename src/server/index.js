@@ -55,22 +55,38 @@ async function  runServer() {
 
 
   app.post('/shapes/global/delete', ensureAdminLoggedIn(), (req, res) => {
-    let files = [req.body.filePath,
-      req.body.filePath.replace(".shape", ".js"),
-      req.body.filePath.replace(".shape", ".md"),
-      req.body.filePath.replace(".shape", ".custom"),
-      req.body.filePath.replace(".shape", ".png")
-    ]
-    let promisses = files.map( file => persistence.deleteFile(dataDirectory, file))
-    Promise.allSettled(promisses)
-      .then( () => {
-        github.delete( files.map( file => { return {path: path.join('src', "data", file)} }), "-empty-")
-        res.send("ok")
-        generator.generateShapeIndex(dataDirectory)
-      })
-      .catch( () => {
-        res.status(403).send("error")
-      })
+    let isDir = fs.lstatSync(req.body.filePath).isDirectory()
+    if(isDir) {
+      persistence.delete(dataDirectory, req.body.filePath)
+        .then( (sanitizedRelativePath) => {
+          return github.deleteDirectory( sanitizedRelativePath , "-delete directory-")
+        })
+        .finally( () => {
+          res.send("ok")
+          generator.generateShapeIndex(dataDirectory)
+        })
+        .catch( () => {
+          res.status(403).send("error")
+        })
+    }
+    else{
+      let files = [req.body.filePath,
+        req.body.filePath.replace(".shape", ".js"),
+        req.body.filePath.replace(".shape", ".md"),
+        req.body.filePath.replace(".shape", ".custom"),
+        req.body.filePath.replace(".shape", ".png")
+      ]
+      let promisses = files.map( file => persistence.delete(dataDirectory, file))
+      Promise.allSettled(promisses)
+        .then( () => {
+          github.delete( files.map( file => { return {path: path.join('src', "data", file)} }), "-empty-")
+          res.send("ok")
+          generator.generateShapeIndex(dataDirectory)
+        })
+        .catch( () => {
+          res.status(403).send("error")
+        })
+    }
   })
 
   app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => {

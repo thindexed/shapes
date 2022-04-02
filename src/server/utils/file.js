@@ -251,7 +251,7 @@ module.exports = {
    * @param fileRelativePath
    * @param res
    */
-  deleteFile: function (dataDirectory, fileRelativePath, res=null) {
+  delete: function (dataDirectory, fileRelativePath, res=null) {
     return new Promise( (resolve, reject) => {
       let fileAbsolutePath = path.join(dataDirectory, fileRelativePath)
       // check that the normalize path is the same as the concatenated. It is possible that these are not the same
