@@ -108,12 +108,12 @@ module.exports = {
               {
               path: toFiles[index],
               mode: '100644',
-              type: 'blob',
+              type: TYPE.BLOB,
               sha: infos[index].sha
             },{
               path: fromFiles[index],
               mode: '100644',
-              type: 'blob',
+              type: TYPE.BLOB,
               sha: null
             }]
           }),
@@ -136,17 +136,23 @@ module.exports = {
   renameDirectory: async function(fromDir, toDir, message) {
     let parentDir = path.dirname(fromDir)
     let parentSha = null
+    let dirSha = null
     return fetchTree().then( (tree) => {
       parentSha = tree.sha
       return repo.contents(parentDir).fetch()
     }).then(function(infos) {
       let item = infos.items.find( item => item.path===fromDir )
-      console.log(item.sha) 
-      return repo.git.trees(item.sha).fetch({recursive:true});
+      dirSha = item.sha
+      return repo.git.trees(dirSha).fetch({recursive:true});
     }).then(function({tree}) {
       const newTree = tree.filter(({ type }) => type === TYPE.BLOB)
                               .map(({ path, mode, type }) => ( { path: `${fromDir}/${path}`, sha: null, mode, type }));
-      console.log(newTree)
+      newTree.push( {
+        path: toDir,
+        mode: '040000',
+        type: TYPE.TREE,
+        sha: dirSha
+      })
       return repo.git.trees.create({
         tree: newTree,
         base_tree: parentSha
