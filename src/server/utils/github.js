@@ -1,8 +1,10 @@
 const path = require('path')
-var Octokat = require('octokat');
+const Octokat = require('octokat')
+const GitHub = require('github-api')
 
 let octokat = null
 let repo = null
+let gh = null
 
 const GITHUB_ORG = process.env.GITHUB_ORG || 'thindexed'
 const GITHUB_REPO = process.env.GITHUB_REPO || 'shapes'
@@ -15,6 +17,8 @@ if(GITHUB_TOKEN === null) {
 else {
   octokat = new Octokat({ token: GITHUB_TOKEN});
   repo = octokat.repos(GITHUB_ORG, GITHUB_REPO);
+  gh = new GitHub({ token: GITHUB_TOKEN}).getRepo(GITHUB_ORG, GITHUB_REPO)
+
 }
 
 function fetchHead() {
@@ -41,7 +45,7 @@ module.exports = {
         return repo.git.trees.create({
           tree: files.map(function(file, index) {
             return {
-              path: path.join('src', "data",file.path),
+              path: file.path,
               mode: '100644',
               type: 'blob',
               sha: blobs[index].sha
@@ -65,12 +69,11 @@ module.exports = {
 
   delete: function(files, message) {
     return fetchTree()
-      .then((tree) => {
-        console.log(tree)
+      .then(function(tree) {
         return repo.git.trees.create({
           tree: files.map(function(file) {
             return {
-              path: path.join('src', "data",file.path),
+              path: file.path,
               mode: '100644',
               type: 'blob',
               sha: null
@@ -91,6 +94,67 @@ module.exports = {
           sha: commit.sha
         });
       })
-  }
+  },
 
+  renameFiles: function(fromFiles, toFiles, message) {
+    return Promise.all(fromFiles.map((file) => {
+      return repo.contents(file).fetch()
+    })).then(function(infos) {
+      return fetchTree().then(function(tree) {
+        return repo.git.trees.create({
+          tree: toFiles.flatMap(function(file, index) {
+            return [
+              {
+              path: toFiles[index],
+              mode: '100644',
+              type: 'blob',
+              sha: infos[index].sha
+            },{
+              path: fromFiles[index],
+              mode: '100644',
+              type: 'blob',
+              sha: null
+            }]
+          }),
+          base_tree: tree.sha
+        });
+      });
+    }).then(function(tree) {
+      return repo.git.commits.create({
+        message: message,
+        tree: tree.sha,
+        parents: [ head.object.sha ]
+      });
+    }).then(function(commit) {
+      return repo.git.refs.heads(GITHUB_BRANCH).update({
+        sha: commit.sha
+      });
+    });
+  },
+
+  renameDirectory: async function(fromDir, toDir, message) {
+    let parentDir = path.dirname(fromDir)
+    return repo.contents(parentDir).fetch()
+    .then(function(infos) {
+      let item = infos.items.find( item => item.path===fromDir )
+      console.log(item.sha) 
+      return repo.git.trees(item.sha).fetch({recursive:true});
+    }).then(function(tree) {
+      console.log(tree)
+      return repo.git.trees.create({
+        tree: [],
+        base_tree: tree.sha
+      });
+    }).then(function(tree) {
+      return repo.git.commits.create({
+        message: message,
+        tree: tree.sha,
+        parents: [ head.object.sha ]
+      });
+    }).then(function(commit) {
+      return repo.git.refs.heads(GITHUB_BRANCH).update({
+        sha: commit.sha
+      });
+    });
+  }
 }

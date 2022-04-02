@@ -102,7 +102,7 @@ module.exports = {
   },
 
   getBinaryFile: function (baseDir, subDir, res=null) {
-    return new Promise(()=>{
+    return new Promise((resolve, reject)=>{
       let file = path.join(baseDir, subDir)
 
       if (file !== sanitize(file)) {
@@ -126,21 +126,20 @@ module.exports = {
   
       if (!fs.existsSync(file)) {
         res?.status(404).send('Not found')
-        reject()
+        reject("Not found")
         return
       }
       try {
-         if(fs.existsSync(file)) {
-          fs.readFile(file, (err, data) => {
-            res?.writeHead(200, {'Content-Type': 'image/png'})
-            res?.end(data)
-          })
+        let pngFile = file.replace(".shape",".png").replace(".brain",".png")
+        if(fs.existsSync(pngFile)) {
+          res?.sendFile(pngFile)
+          resolve()
         }else {
           fs.readFile(file, (err, data) => {
             let json = JSON.parse(data)
             if (!json.image) {
               res?.status(404).send('Not found')
-              reject()
+              reject("Not Found")
               return
             }
             let base64data = json.image.replace(/^data:image\/png;base64,/, '')
@@ -150,12 +149,12 @@ module.exports = {
               'Content-Length': img.length
             })
             res?.end(img)
-            resolve(img)
+            resolve()
           })
         }
       } catch (exc) {
         res?.status(404).send('Not found')
-        reject()
+        reject("Not Found")
       }
     })
   },
@@ -165,76 +164,82 @@ module.exports = {
    * Rename a file or directory.
    *
    * @param baseDir
-   * @param from
-   * @param to
+   * @param fromRelativePath
+   * @param toRelativePath
    * @param res
    */
-  renameFile: function (baseDir, from, to, res=null) {
+  renameFile: function (baseDir, fromRelativePath, toRelativePath, res=null) {
     return new Promise( (resolve, reject) => {
-      to = sanitize(to)
+      try {
+        toRelativePath = sanitize(toRelativePath)
 
-      let fromDir = path.join(baseDir, from)
-      let toDir = path.join(baseDir, to)
-      let fromDirParent = path.dirname(fromDir)
-      let toDirParent = path.dirname(toDir)
-  
-      if (fromDir !== sanitize(fromDir)) {
-        res?.status(403).send('Unable to rename image')
-        reject("'sanitize' fromDir is different from the original")
-        return
-      }
-  
-      // "from" must be exists
-      if (!fs.existsSync(fromDir)) {
-        res?.status(403).send('Unable to rename file')
-        reject("'from' didn't exists")
-        return
-      }
-  
-      // check that the normalize path is the same the concatenated. It is possible the these are not the same
-      // if the "from" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
-      if (fromDir !== path.normalize(fromDir)) {
-        res?.status(403).send('Unable to rename file')
-        reject("'fromDir' path with dots")
-        return
-      }
-  
-      if (toDir !== path.normalize(toDir)) {
-        res?.status(403).send('Unable to rename file')
-        reject("'toDir' path with dots")
-        return
-      }
-  
-      // "from" and "to" directory must have the same parent directory. It is not allowed to move a directory out
-      // of the tree with a rename operation
-      if (fromDirParent !== toDirParent) {
-        res?.status(403).send('Unable to rename file')
-        reject("moving files out of parent directory is not allowed")
-        return
-      }
-  
-      if (fs.existsSync(toDir)) {
-        res?.status(403).send('Unable to rename file')
-        reject("'toDir' already exists")
-        return
-      }
-  
-      mv(fromDir, toDir, err => {
-        if (err) {
-          reject(err)
+        let fromAbsolutePath = path.join(baseDir, fromRelativePath)
+        let toAbsolutePath = path.join(baseDir, toRelativePath)
+        let fromAbsoluteDir = path.dirname(fromAbsolutePath)
+        let toAbsoluteDir = path.dirname(toAbsolutePath)
+    
+        if (fromAbsolutePath !== sanitize(fromAbsolutePath)) {
+          res?.status(403).send('Unable to rename image')
+          reject("'sanitize' fromDir is different from the original")
+          return
         }
-        else {
-          let isDir = fs.lstatSync(toDir).isDirectory()
-          res?.send({
-            name: path.basename(to),
-            filePath: to,
-            folder:  path.dirname(to),
-            type: isDir ? "dir" : "file",
-            dir: isDir
-          })
-          resolve()
+    
+        // "from" must be exists
+        if (!fs.existsSync(fromAbsolutePath)) {
+          res?.status(403).send('Unable to rename file')
+          reject("'from' didn't exists")
+          return
         }
-      })
+    
+        // check that the normalize path is the same the concatenated. It is possible the these are not the same
+        // if the "from" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
+        if (fromAbsolutePath !== path.normalize(fromAbsolutePath)) {
+          res?.status(403).send('Unable to rename file')
+          reject("'fromDir' path with dots")
+          return
+        }
+    
+        if (toAbsolutePath !== path.normalize(toAbsolutePath)) {
+          res?.status(403).send('Unable to rename file')
+          reject("'toDir' path with dots")
+          return
+        }
+    
+        // "from" and "to" directory must have the same parent directory. It is not allowed to move a directory out
+        // of the tree with a rename operation
+        if (fromAbsoluteDir !== toAbsoluteDir) {
+          res?.status(403).send('Unable to rename file')
+          reject("moving files out of parent directory is not allowed")
+          return
+        }
+    
+        if (fs.existsSync(toAbsolutePath)) {
+          res?.status(403).send('Unable to rename file')
+          reject("'toDir' already exists")
+          return
+        }
+    
+        mv(fromAbsolutePath, toAbsolutePath, err => {
+          if (err) {
+            console.log(err)
+            reject(err)
+          }
+          else {
+            let isDir = fs.lstatSync(toAbsolutePath).isDirectory()
+            res?.send({
+              name: path.basename(toRelativePath),
+              filePath: toRelativePath,
+              folder:  path.dirname(toRelativePath),
+              type: isDir ? "dir" : "file",
+              dir: isDir
+            })
+            resolve({fromRelativePath, toRelativePath, isDir})
+          }
+        })
+      }
+      catch(error){
+        reject(error)
+      }
     })
   },
 

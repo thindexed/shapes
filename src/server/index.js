@@ -45,7 +45,13 @@ async function  runServer() {
   // TODO: migrate to REST service API
   app.get('/shapes/global/list', (req, res) => persistence.listFiles(dataDirectory, req.query.path, res))
   app.get('/shapes/global/get', (req, res) => persistence.getJSONFile(dataDirectory, req.query.filePath, res))
-  app.get('/shapes/global/image', (req, res) =>  persistence.getBinaryFile(dataDirectory, req.query.filePath, res))
+
+  app.get('/shapes/global/image', (req, res) =>  { 
+    persistence.getBinaryFile(dataDirectory, req.query.filePath, res)
+    .catch( error => {
+      console.log(error)
+    })
+  })
 
 
   app.post('/shapes/global/delete', ensureAdminLoggedIn(), (req, res) => {
@@ -58,27 +64,63 @@ async function  runServer() {
     let promisses = files.map( file => persistence.deleteFile(dataDirectory, file))
     Promise.allSettled(promisses)
       .then( () => {
-        github.delete( files.map( file => { return {path: file} }))
+        github.delete( files.map( file => { return {path: path.join('src', "data", file)} }), "-empty-")
         res.send("ok")
+        generator.generateShapeIndex(dataDirectory)
       })
       .catch( () => {
         res.status(403).send("error")
       })
   })
 
-  app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => persistence.renameFile(dataDirectory, req.body.from, req.body.to, res))
+  app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => {
+    persistence.renameFile(dataDirectory, req.body.from, req.body.to, res)
+    .then( ( {fromRelativePath, toRelativePath, isDir}) => {
+      fromRelativePath =  path.join('src', "data", fromRelativePath)
+      toRelativePath =  path.join('src', "data", toRelativePath)
+
+      if(isDir ){
+        github.renameDirectory(fromRelativePath, toRelativePath, "-rename")
+      }
+      else {
+        let fromFiles = [
+          fromRelativePath,
+          fromRelativePath.replace(".shape", ".js"),
+          fromRelativePath.replace(".shape", ".md"),
+          fromRelativePath.replace(".shape", ".custom"),
+          fromRelativePath.replace(".shape", ".png")
+        ]
+        let toFiles = [
+          toRelativePath,
+          toRelativePath.replace(".shape", ".js"),
+          toRelativePath.replace(".shape", ".md"),
+          toRelativePath.replace(".shape", ".custom"),
+          toRelativePath.replace(".shape", ".png")
+        ]
+        github.renameFiles(fromFiles, toFiles, "-rename-").catch( error => { console.log(error)})
+      }
+      generator.generateShapeIndex(dataDirectory)
+    })
+    .catch( reason => {
+      console.log(reason)
+    })
+  })
+  
   app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => persistence.createFolder(dataDirectory, req.body.filePath, res))
   app.post('/shapes/global/save', ensureAdminLoggedIn(),  (req, res) => {
-      let shapeRelativePath = req.body.filePath
-      let content = req.body.content
-      let reason = req.body.commitMessage || "-empty-"
-      persistence.writeFile(dataDirectory, shapeRelativePath, content, res)
-        .then((sanitizedRelativePath)=>{
-          return generator.thumbnail(dataDirectory, sanitizedRelativePath, content)
-        })
-        .then( (files) => {
-          github.commit(files, reason)
-        })
+    let shapeRelativePath = req.body.filePath
+    let content = req.body.content
+    let reason = req.body.commitMessage || "-empty-"
+    persistence.writeFile(dataDirectory, shapeRelativePath, content, res)
+      .then((sanitizedRelativePath)=>{
+        return generator.thumbnail(dataDirectory, sanitizedRelativePath, content)
+      })
+      .then( (files) => {
+        github.commit(files.map( file => { return {path: path.join('src', "data", file)} }), reason)
+      })
+      .catch( reason => {
+        console.log(reason)
+      })
   })
   
 

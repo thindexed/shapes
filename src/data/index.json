@@ -544,88 +544,32 @@
     "image": "circuit/digital/timer/Delay.png"
   },
   {
-    "name": "hardware_arduino_Arduino",
+    "name": "hardware_arduinooo_Arduino",
     "tags": [
       "hardware",
-      "arduino",
+      "arduinooo",
       "Arduino"
     ],
     "version": "local-version",
     "basename": "Arduino.js",
     "displayName": "Arduino",
-    "basedir": "hardware/arduino",
-    "filePath": "hardware/arduino/Arduino.shape",
-    "image": "hardware/arduino/Arduino.png"
+    "basedir": "hardware/arduinooo",
+    "filePath": "hardware/arduinooo/Arduino.shape",
+    "image": "hardware/arduinooo/Arduino.png"
   },
   {
-    "name": "hardware_arduino_Led",
+    "name": "hardware_arduinooo_Led",
     "tags": [
       "hardware",
-      "arduino",
+      "arduinooo",
       "Led"
     ],
     "version": "local-version",
     "basename": "Led.js",
     "displayName": "Led",
-    "basedir": "hardware/arduino",
-    "filePath": "hardware/arduino/Led.shape",
-    "image": "hardware/arduino/Led.png"
-  },
-  {
-    "name": "hardware_raspi_GPIORead",
-    "tags": [
-      "hardware",
-      "raspi",
-      "GPIORead"
-    ],
-    "version": "local-version",
-    "basename": "GPIORead.js",
-    "displayName": "GPIORead",
-    "basedir": "hardware/raspi",
-    "filePath": "hardware/raspi/GPIORead.shape",
-    "image": "hardware/raspi/GPIORead.png"
-  },
-  {
-    "name": "hardware_raspi_PCA9685Motor",
-    "tags": [
-      "hardware",
-      "raspi",
-      "PCA9685Motor"
-    ],
-    "version": "local-version",
-    "basename": "PCA9685Motor.js",
-    "displayName": "PCA9685Motor",
-    "basedir": "hardware/raspi",
-    "filePath": "hardware/raspi/PCA9685Motor.shape",
-    "image": "hardware/raspi/PCA9685Motor.png"
-  },
-  {
-    "name": "hardware_raspi_PCA9685Servo",
-    "tags": [
-      "hardware",
-      "raspi",
-      "PCA9685Servo"
-    ],
-    "version": "local-version",
-    "basename": "PCA9685Servo.js",
-    "displayName": "PCA9685Servo",
-    "basedir": "hardware/raspi",
-    "filePath": "hardware/raspi/PCA9685Servo.shape",
-    "image": "hardware/raspi/PCA9685Servo.png"
-  },
-  {
-    "name": "hardware_raspi_PWMWrite",
-    "tags": [
-      "hardware",
-      "raspi",
-      "PWMWrite"
-    ],
-    "version": "local-version",
-    "basename": "PWMWrite.js",
-    "displayName": "PWMWrite",
-    "basedir": "hardware/raspi",
-    "filePath": "hardware/raspi/PWMWrite.shape",
-    "image": "hardware/raspi/PWMWrite.png"
+    "basedir": "hardware/arduinooo",
+    "filePath": "hardware/arduinooo/Led.shape",
+    "image": "hardware/arduinooo/Led.png"
   },
   {
     "name": "math_Mean",
