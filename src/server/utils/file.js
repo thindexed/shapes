@@ -16,7 +16,7 @@ module.exports = {
 
       if (listDir !== sanitize(listDir)) {
         res?.status(403).send('Unable to read image')
-        reject("'sanitize' directory name is different from original directory name")
+        reject(`'sanitize' directory name (${listDir}) is different from original directory name`)
         return
       }
   
@@ -32,7 +32,7 @@ module.exports = {
       // if the "subDir" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
       if (listDir !== path.normalize(listDir)) {
         res?.status(403).send('Unable to list file')
-        reject("'listDir' path with dots")
+        reject(`'${listDir}' path with dots`)
         return
       }
   
@@ -66,26 +66,26 @@ module.exports = {
     
       if (file !== sanitize(file)) {
         res?.status(403).send('Unable to read file')
-        reject("'sanitize' filepath is different from the original")
+        reject(`'sanitize' filepath (${file}) is different from the original`)
         return
       }
   
       if (file !== path.normalize(file)) {
         res?.status(403).send('Unable to read file')
-        reject("'toDir' path with dots")
+        reject(`'${file}' path with dots`)
         return
       }
   
       file = path.normalize(file)
       if(!file.startsWith(baseDir)){
         res?.status(403).send('Unable to read file')
-        reject("'subDir' isn't below baseDir")
+        reject(`'${file}' path is not below base dir`)
         return
       }
   
       if (!fs.existsSync(file)) {
         res?.status(404).send('Not found')
-        reject("not found")
+        reject(`'${file}' not found`)
         return
       }
   
@@ -96,7 +96,7 @@ module.exports = {
         resolve()
       } catch (exc) {
         reject(exc)
-        res?.status(404).send('Not found')
+        res?.status(404).send(`'${file}' not found`)
       }
     })
   },
@@ -107,26 +107,26 @@ module.exports = {
 
       if (file !== sanitize(file)) {
         res?.status(403).send('Unable to read image')
-        reject("'sanitize' filepath is different from the original")
+        reject(`sanitized file path '${file}' is different thant original file path`)
         return
       }
   
       if (file !== path.normalize(file)) {
         res?.status(403).send('Unable to read image')
-        reject("'toDir' path with dots")
+        reject(`normalized path of '${file}' is different than original`)
         return
       }
   
       file = path.normalize(file)
       if(!file.startsWith(baseDir)){
         res?.status(403).send('Unable to read image')
-        reject("'subDir' isn't below baseDir")
+        reject(`'${file}' isn't below base directory`)
         return
       }
   
       if (!fs.existsSync(file)) {
         res?.status(404).send('Not found')
-        reject("Not found")
+        reject(`'${file}' not found`)
         return
       }
       try {
@@ -139,7 +139,7 @@ module.exports = {
             let json = JSON.parse(data)
             if (!json.image) {
               res?.status(404).send('Not found')
-              reject("Not Found")
+              reject(`'${file}' not found`)
               return
             }
             let base64data = json.image.replace(/^data:image\/png;base64,/, '')
@@ -153,8 +153,8 @@ module.exports = {
           })
         }
       } catch (exc) {
-        res?.status(404).send('Not found')
-        reject("Not Found")
+        res?.status(404).send(`not found`)
+        reject(`'${file}' not found`)
       }
     })
   },
@@ -180,14 +180,14 @@ module.exports = {
     
         if (fromAbsolutePath !== sanitize(fromAbsolutePath)) {
           res?.status(403).send('Unable to rename image')
-          reject("'sanitize' fromDir is different from the original")
+          reject(`sanitized filepath '${fromAbsolutePath}' is different than the original file`)
           return
         }
     
         // "from" must be exists
         if (!fs.existsSync(fromAbsolutePath)) {
           res?.status(403).send('Unable to rename file')
-          reject("'from' didn't exists")
+          reject(`'${fromAbsolutePath}' not found`)
           return
         }
     
@@ -195,13 +195,13 @@ module.exports = {
         // if the "from" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
         if (fromAbsolutePath !== path.normalize(fromAbsolutePath)) {
           res?.status(403).send('Unable to rename file')
-          reject("'fromDir' path with dots")
+          reject(`normalized path of '${fromAbsolutePath}' is not equals to original filepath`)
           return
         }
     
         if (toAbsolutePath !== path.normalize(toAbsolutePath)) {
           res?.status(403).send('Unable to rename file')
-          reject("'toDir' path with dots")
+          reject(`normalized path of '${toAbsolutePath}' is not equals to original filepath`)
           return
         }
     
@@ -215,7 +215,7 @@ module.exports = {
     
         if (fs.existsSync(toAbsolutePath)) {
           res?.status(403).send('Unable to rename file')
-          reject("'toDir' already exists")
+          reject(`'${toAbsolutePath}' not found`)
           return
         }
     
@@ -259,20 +259,20 @@ module.exports = {
   
       if (fileAbsolutePath !== sanitize(fileAbsolutePath)) {
         res?.status(403).send('Unable to delete file')
-        reject("'sanitize' file name is different from the original")
+        reject(`sanitized filepath '${fileAbsolutePath}' is different than the original file`)
         return
       }
   
       if (fileAbsolutePath !== path.normalize(fileAbsolutePath)) {
         res?.status(403).send('Unable to delete file')
-        reject("'file' path with dots")
+        reject(`normalized path of '${fileAbsolutePath}' is not equals to original filepath`)
         return
       }
   
       fileAbsolutePath = path.normalize(fileAbsolutePath)
       if(!fileAbsolutePath.startsWith(dataDirectory)){
         res?.status(403).send('Unable to delete image')
-        reject("'subDir' isn't below baseDir")
+        reject(`'${fileAbsolutePath}' isn't below data directory`)
         return
       }
   
@@ -291,44 +291,44 @@ module.exports = {
 
   createFolder: function (baseDir, subDir, res=null) {
     return new Promise((resolve, reject) => {
-      let directory = path.join(baseDir, subDir)
+      let directoryRelativePath = path.join(baseDir, subDir)
 
-      if (directory !== sanitize(directory)) {
+      if (directoryRelativePath !== sanitize(directoryRelativePath)) {
         res?.status(403).send('Unable to create folder')
-        reject("'sanitize' directory name is different from the original")
+        reject(`sanitized filepath '${directoryRelativePath}' is different than the original file`)
         return
       }
   
       // check that the normalize path is the same as the concatenated. It is possible that these are not the same
       // if the "subDir" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
-      if (directory !== path.normalize(directory)) {
+      if (directoryRelativePath !== path.normalize(directoryRelativePath)) {
         console.log()
         res?.status(403).send('Unable to create folder')
-        reject("'directory' path with dots")
+        reject(`normalized path of '${directoryRelativePath}' is not equals to original filepath`)
         return
       }
   
-      directory = path.normalize(directory)
-      if(!directory.startsWith(baseDir)){
+      directoryRelativePath = path.normalize(directoryRelativePath)
+      if(!directoryRelativePath.startsWith(baseDir)){
         res?.status(403).send('Unable to delete image')
-        reject("'subDir' isn't below baseDir")
+        reject(`'${directoryRelativePath}' isn't below data directory`)
         return
       }
   
-      makeDir(directory)
+      makeDir(directoryRelativePath)
         .then(() => {
           res?.send({
-            name: path.basename(directory),
-            filePath: directory,
-            folder:  path.dirname(directory),
+            name: path.basename(directoryRelativePath),
+            filePath: directoryRelativePath,
+            folder:  path.dirname(directoryRelativePath),
             type: "dir",
             dir: true
           })
-          resolve()
+          resolve(directoryRelativePath)
         })
-        .catch(() => {
+        .catch(( error) => {
           res?.status(403).send('Unable to create directory')
-          reject('Unable to create directory')
+          reject(error)
         })
     })
   },
@@ -345,7 +345,7 @@ module.exports = {
       // if the "subDir" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
       if (fileAbsolutePath !== path.normalize(fileAbsolutePath)) {
         res?.status(403).send('Unable to write file')
-        reject("'file' path with dots")
+        reject(`normalized path of '${fileAbsolutePath}' is not equals to original filepath`)
         return
       }
   
@@ -354,7 +354,7 @@ module.exports = {
       fileDirectory = path.normalize(fileDirectory)
       if(!fileDirectory.startsWith(baseDir)){
         res?.status(403).send('Unable to write file')
-        reject("'dir' path is out of baseDir")
+        reject(`'${fileDirectory}' isn't below data directory`)
         return
       }
   

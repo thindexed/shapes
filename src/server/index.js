@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+const fs = require('fs-extra')
+
 const path = require('path')
 const express = require('express')
 const app = express()
@@ -8,7 +10,8 @@ const generator = require("./thumbnails")
 const persistence = require("./utils/file")
 const github = require('./utils/github')
 
-const dataDirectory = path.normalize(__dirname + '/../data/')
+const dataAbsoluteDirectory = path.normalize(__dirname + '/../data/')
+const dataRelativeDirectory = "src/data/"
 
 const PORT = process.env.PORT || 8080
 
@@ -39,15 +42,26 @@ function ensureAdminLoggedIn(options) {
 async function  runServer() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
-  app.use('/shapes/global', express.static(dataDirectory));
+  app.use('/shapes/global', express.static(dataAbsoluteDirectory));
 
 
   // TODO: migrate to REST service API
-  app.get('/shapes/global/list', (req, res) => persistence.listFiles(dataDirectory, req.query.path, res))
-  app.get('/shapes/global/get', (req, res) => persistence.getJSONFile(dataDirectory, req.query.filePath, res))
+  app.get('/shapes/global/list', (req, res) => {
+    persistence.listFiles(dataAbsoluteDirectory, req.query.path, res)
+    .catch( exception => {
+      console.log(exception)
+    })
+  })
+  
+  app.get('/shapes/global/get', (req, res) => {
+    persistence.getJSONFile(dataAbsoluteDirectory, req.query.filePath, res)
+    .catch( exception => {
+      console.log(exception)
+    }) 
+  })
 
   app.get('/shapes/global/image', (req, res) =>  { 
-    persistence.getBinaryFile(dataDirectory, req.query.filePath, res)
+    persistence.getBinaryFile(dataAbsoluteDirectory, req.query.filePath, res)
     .catch( error => {
       console.log(error)
     })
@@ -55,33 +69,37 @@ async function  runServer() {
 
 
   app.post('/shapes/global/delete', ensureAdminLoggedIn(), (req, res) => {
-    let isDir = fs.lstatSync(req.body.filePath).isDirectory()
+    let fileRelativePath = req.body.filePath
+    let isDir = fs.lstatSync(path.join(dataAbsoluteDirectory,fileRelativePath)).isDirectory()
     if(isDir) {
-      persistence.delete(dataDirectory, req.body.filePath)
+      persistence.delete(dataAbsoluteDirectory, fileRelativePath)
         .then( (sanitizedRelativePath) => {
-          return github.deleteDirectory( sanitizedRelativePath , "-delete directory-")
+          let githubPath =  path.join(dataRelativeDirectory, sanitizedRelativePath)
+          return github.deleteDirectory( githubPath , "-delete directory-")
         })
-        .finally( () => {
+        .then( () => {
           res.send("ok")
-          generator.generateShapeIndex(dataDirectory)
+          generator.generateShapeIndex(dataAbsoluteDirectory)
         })
-        .catch( () => {
+        .catch( (error) => {
+          console.log(error)
           res.status(403).send("error")
         })
     }
     else{
-      let files = [req.body.filePath,
-        req.body.filePath.replace(".shape", ".js"),
-        req.body.filePath.replace(".shape", ".md"),
-        req.body.filePath.replace(".shape", ".custom"),
-        req.body.filePath.replace(".shape", ".png")
+      let files = [fileRelativePath,
+        fileRelativePath.replace(".shape", ".js"),
+        fileRelativePath.replace(".shape", ".md"),
+        fileRelativePath.replace(".shape", ".custom"),
+        fileRelativePath.replace(".shape", ".png")
       ]
-      let promisses = files.map( file => persistence.delete(dataDirectory, file))
+      let promisses = files.map( file => persistence.delete(dataAbsoluteDirectory, file))
       Promise.allSettled(promisses)
-        .then( () => {
-          github.delete( files.map( file => { return {path: path.join('src', "data", file)} }), "-empty-")
+        .then( (sanitizedRelativePaths ) => {
+          console.log(sanitizedRelativePaths)
+          github.delete( files.map( file => { return {path: path.join(dataRelativeDirectory, file)} }), "-empty-")
           res.send("ok")
-          generator.generateShapeIndex(dataDirectory)
+          generator.generateShapeIndex(dataAbsoluteDirectory)
         })
         .catch( () => {
           res.status(403).send("error")
@@ -90,10 +108,10 @@ async function  runServer() {
   })
 
   app.post('/shapes/global/rename', ensureAdminLoggedIn(), (req, res) => {
-    persistence.renameFile(dataDirectory, req.body.from, req.body.to, res)
+    persistence.renameFile(dataAbsoluteDirectory, req.body.from, req.body.to, res)
     .then( ( {fromRelativePath, toRelativePath, isDir}) => {
-      fromRelativePath =  path.join('src', "data", fromRelativePath)
-      toRelativePath =  path.join('src', "data", toRelativePath)
+      fromRelativePath =  path.join(dataRelativeDirectory, fromRelativePath)
+      toRelativePath =  path.join(dataRelativeDirectory, toRelativePath)
 
       if(isDir ){
         github.renameDirectory(fromRelativePath, toRelativePath, "-rename-").catch( error => { console.log(error)})
@@ -115,24 +133,36 @@ async function  runServer() {
         ]
         github.renameFiles(fromFiles, toFiles, "-rename-").catch( error => { console.log(error)})
       }
-      generator.generateShapeIndex(dataDirectory)
+      generator.generateShapeIndex(dataAbsoluteDirectory)
     })
     .catch( reason => {
       console.log(reason)
     })
   })
   
-  app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => persistence.createFolder(dataDirectory, req.body.filePath, res))
+  app.post('/shapes/global/folder', ensureAdminLoggedIn(), (req, res) => {
+    persistence.createFolder(dataAbsoluteDirectory, req.body.filePath, res)
+    .then( (directoryRelativePath) => {
+      console.log(directoryRelativePath)
+      // create file into empty directory. Otherwise the directory is not stored in github.
+      // (github prunes empty directories)
+      return github.commit([ {path:path.join(directoryRelativePath, "placeholder.txt"), content:"-placeholder for empty directories-"} ], "folder creation")
+    })
+    .catch( error => {
+      console.log(error)
+    })
+  })
+
   app.post('/shapes/global/save', ensureAdminLoggedIn(),  (req, res) => {
     let shapeRelativePath = req.body.filePath
     let content = req.body.content
     let reason = req.body.commitMessage || "-empty-"
-    persistence.writeFile(dataDirectory, shapeRelativePath, content, res)
+    persistence.writeFile(dataAbsoluteDirectory, shapeRelativePath, content, res)
       .then((sanitizedRelativePath)=>{
-        return generator.thumbnail(dataDirectory, sanitizedRelativePath, content)
+        return generator.thumbnail(dataAbsoluteDirectory, sanitizedRelativePath, content)
       })
       .then( (files) => {
-        github.commit(files.map( file => { return {path: path.join('src', "data", file)} }), reason)
+        github.commit(files.map( file => { return {path: path.join(dataRelativeDirectory, file)} }), reason)
       })
       .catch( reason => {
         console.log(reason)
@@ -147,5 +177,5 @@ async function  runServer() {
   });
 }
 
-generator.generateShapeIndex(dataDirectory)
+generator.generateShapeIndex(dataAbsoluteDirectory)
 runServer()

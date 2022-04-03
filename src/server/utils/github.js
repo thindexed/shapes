@@ -179,14 +179,14 @@ module.exports = {
     })
   },
 
-  deleteDirectory: function(director, message) {
-    let parentDir = path.dirname(director)
+  deleteDirectory: function(directory, message) {
+    let parentDir = path.dirname(directory)
     let parentSha = null
     return fetchTree().then( (tree) => {
       parentSha = tree.sha
       return repo.contents(parentDir).fetch()
     }).then(function(infos) {
-      let item = infos.items.find( item => item.path===director )
+      let item = infos.items.find( item => item.path===directory )
       if(!item) {
         throw "not found"
       }
@@ -196,7 +196,7 @@ module.exports = {
       //
       return repo.git.trees.create({
         tree: tree.filter(({ type }) => type === TYPE.BLOB)
-                  .map(({ path, mode, type }) => ( { path: `${director}/${path}`, sha: null, mode, type })),
+                  .map(({ path, mode, type }) => ( { path: `${directory}/${path}`, sha: null, mode, type })),
         base_tree: parentSha
       });
     }).then(function(tree) {
