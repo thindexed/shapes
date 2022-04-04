@@ -20,7 +20,6 @@ function fileToPackage(dataDirectory, file) {
 
 function concatFiles(dataDirectory) {
   console.log("generate index.js in: ",dataDirectory)
-  
   return new Promise( (resolve, reject) => {
     try {
       let indexFile = dataDirectory + "index.js"
