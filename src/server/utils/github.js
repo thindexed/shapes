@@ -137,45 +137,50 @@ module.exports = {
     let parentDir = path.dirname(fromDir)
     let parentSha = null
     let dirSha = null
-    return fetchTree().then( (tree) => {
-      parentSha = tree.sha
-      return repo.contents(parentDir).fetch()
-    }).then(function(infos) {
-      let item = infos.items.find( item => item.path===fromDir )
-      if(!item) {
-        throw "not found"
-      }
-      dirSha = item.sha
-      return repo.git.trees(dirSha).fetch({recursive:true});
-    }).then(function({tree}) {
-      // create the "tree" with "sha:null" to delete all files below the old directory
-      //
-      const newTree = tree.filter(({ type }) => type === TYPE.BLOB)
-                              .map(({ path, mode, type }) => ( { path: `${fromDir}/${path}`, sha: null, mode, type }));
-      // create a tree with the sha of the delete directory....inherits the content.
-      //
-      newTree.push( {
-        path: toDir,
-        mode: '040000',
-        type: TYPE.TREE,
-        sha: dirSha
+    return new Promise ((resolve, reject) => {
+      fetchTree()
+      .then( (tree) => {
+        parentSha = tree.sha
+        return repo.contents(parentDir).fetch()
+      }).then((infos) => {
+        let item = infos.items.find( item => item.path===fromDir )
+        if(!item) {
+          throw "not found"
+        }
+        dirSha = item.sha
+        return repo.git.trees(dirSha).fetch({recursive:true});
+      }).then(({tree}) => {
+        // create the "tree" with "sha:null" to delete all files below the old directory
+        //
+        const newTree = tree.filter(({ type }) => type === TYPE.BLOB)
+                                .map(({ path, mode, type }) => ( { path: `${fromDir}/${path}`, sha: null, mode, type }));
+        // create a tree with the sha of the delete directory....inherits the content.
+        //
+        newTree.push( {
+          path: toDir,
+          mode: '040000',
+          type: TYPE.TREE,
+          sha: dirSha
+        })
+        // create the new folder and delte the files in the old folder.
+        //
+        return repo.git.trees.create({
+          tree: newTree,
+          base_tree: parentSha
+        });
+      }).then((tree) => {
+        return repo.git.commits.create({
+          message: message,
+          tree: tree.sha,
+          parents: [ head.object.sha ]
+        });
+      }).then((commit) => {
+        return repo.git.refs.heads(GITHUB_BRANCH).update({
+          sha: commit.sha
+        });
+      }).then(function() {
+        resolve()
       })
-      // create the new folder and delte the files in the old folder.
-      //
-      return repo.git.trees.create({
-        tree: newTree,
-        base_tree: parentSha
-      });
-    }).then(function(tree) {
-      return repo.git.commits.create({
-        message: message,
-        tree: tree.sha,
-        parents: [ head.object.sha ]
-      });
-    }).then(function(commit) {
-      return repo.git.refs.heads(GITHUB_BRANCH).update({
-        sha: commit.sha
-      });
     })
   },
 

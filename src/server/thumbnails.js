@@ -4,7 +4,6 @@ const puppeteer = require('puppeteer')
 const path = require("path")
 const fs = require("fs")
 const glob = require("glob")
-const github = require("./utils/github")
 const thisDir = path.normalize(__dirname)
 
 const version =  process.env.VERSION || "local-version"
@@ -20,36 +19,44 @@ function fileToPackage(dataDirectory, file) {
 }
 
 function concatFiles(dataDirectory) {
-  let indexFile = dataDirectory + "index.js";
-  let jsonFile = dataDirectory + "index.json";
-  try {fs.unlinkSync(indexFile);} catch (exc) {}
-  try {fs.unlinkSync(jsonFile);} catch (exc) {}
-
-  glob(dataDirectory+"/**/*.js",  (er, files) => {
-    let content = "";
-    let list = [];
-    files.forEach( (filename)=>  {
-      let relativePath = filename.replace(dataDirectory, "")
-      let basenamePath = relativePath.replace(".js", "")
-      let name = basenamePath.replace(/\//g , "_").replace(/-/g , "_")
-      let basename = relativePath.split('/').pop()
-      let displayName = basename.replace(".js", "")
-      let tags = name.split("_")
-      list.push({
-        name: name,
-        tags: tags,
-        version: version,
-        basename: basename,
-        displayName: displayName,
-        basedir: relativePath.substring(0, relativePath.lastIndexOf('/')),
-        filePath: basenamePath + ".shape",
-        image: basenamePath + ".png"
-      });
-      content += (fs.readFileSync(filename, 'utf8') + "\n\n\n")
-    });
-
-    fs.writeFileSync(jsonFile, JSON.stringify(list, undefined, 2))
-    fs.writeFileSync(indexFile, content)
+  return new Promise( (resolve, reject) => {
+    try {
+      let indexFile = dataDirectory + "index.js"
+      let jsonFile = dataDirectory + "index.json"
+      try {fs.unlinkSync(indexFile);} catch (exc) { reject(exc); return }
+      try {fs.unlinkSync(jsonFile);} catch (exc) { reject(exc); return }
+    
+      glob(dataDirectory+"/**/*.js",  (er, files) => {
+        let content = ""
+        let list = []
+        files.forEach( (filename)=>  {
+          let relativePath = filename.replace(dataDirectory, "")
+          let basenamePath = relativePath.replace(".js", "")
+          let name = basenamePath.replace(/\//g , "_").replace(/-/g , "_")
+          let basename = relativePath.split('/').pop()
+          let displayName = basename.replace(".js", "")
+          let tags = name.split("_")
+          list.push({
+            name: name,
+            tags: tags,
+            version: version,
+            basename: basename,
+            displayName: displayName,
+            basedir: relativePath.substring(0, relativePath.lastIndexOf('/')),
+            filePath: basenamePath + ".shape",
+            image: basenamePath + ".png"
+          });
+          content += (fs.readFileSync(filename, 'utf8') + "\n\n\n")
+        });
+    
+        fs.writeFileSync(jsonFile, JSON.stringify(list, undefined, 2))
+        fs.writeFileSync(indexFile, content)
+      })
+      resolve()
+    }
+    catch( exc){
+      reject(exc)
+    }
   })
 }
 
@@ -57,13 +64,14 @@ module.exports = {
 
   generateShapeIndex: concatFiles,
 
-  thumbnail:  (dataDirectory, shapeCode) => {
+  thumbnail:  (dataDirectory, shapeRelativePath) => {
     return new Promise(async (resolve, reject) => {
       let shapeAbsolutePath = path.normalize(dataDirectory + shapeRelativePath)
 
       try {
-        let json = JSON.parse(fs.readFileSync(shapeAbsolutePath,'utf8'));
-        let pkg = fileToPackage(dataDirectory, shapeAbsolutePath);
+        let shapeCode = fs.readFileSync(shapeAbsolutePath,'utf8')
+        let json = JSON.parse(shapeCode)
+        let pkg = fileToPackage(dataDirectory, shapeAbsolutePath)
   
         json = json.draw2d
         json = JSON.stringify(json, undefined, 2)
@@ -90,8 +98,7 @@ module.exports = {
         }
   
         const page = await browser.newPage()
-        console.log(page)
-        
+       
         page
           .on('console', message => console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
           .on('pageerror', ({ message }) => console.log(message))
@@ -127,25 +134,21 @@ module.exports = {
         jsCode = jsCode.replace(/\$\{VERSION\}/g, version);
         customCode = customCode.replace(/testShape/g, pkg);
   
-        console.log("writing files to disc....", jsAbsolutePath)
+        console.log("writing file to disc....", jsAbsolutePath)
         fs.writeFileSync(jsAbsolutePath, jsCode, 'utf8');
   
-        console.log("writing files to disc....", customAbsolutePath)
+        console.log("writing file to disc....", customAbsolutePath)
         fs.writeFileSync(customAbsolutePath, customCode, 'utf8');
   
-        console.log("writing files to disc....", markdownAbsolutePath)
+        console.log("writing file to disc....", markdownAbsolutePath)
         fs.writeFileSync(markdownAbsolutePath, markdown, 'utf8');
   
-        console.log("writing files to disc....", pngAbsolutePath)
+        console.log("writing file to disc....", pngAbsolutePath)
         fs.writeFileSync(pngAbsolutePath, Buffer.from(img, 'base64'), 'binary');
-  
-        console.log("done")
-  
+   
         if(!DEBUGGING) {
           browser.close()
         }
-  
-        concatFiles(dataDirectory)
         resolve([
             { path: shapeRelativePath, content: Buffer.from(shapeCode).toString("base64") },
             { path: jsRelativePath, content: Buffer.from(jsCode).toString("base64") },
