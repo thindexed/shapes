@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: shapes
-        image: docker.io/freegroup/thindexed-shapes:0.1.0-279
+        image: docker.io/freegroup/thindexed-shapes:0.1.0-282
         envFrom:
         - secretRef:
             name: github-secrets
