@@ -10,7 +10,7 @@
  * Looks disconcerting - extending my own class. But this is a good method to
  * merge basic code and override them with custom methods.
  */
-circuit_74LSXXss_74LS90 = circuit_74LSXXss_74LS90.extend({
+circuit_74LSXX_74LS90 = circuit_74LSXX_74LS90.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);
