@@ -6,7 +6,7 @@
  *
  *
  */
-hardware_arduino_Led = hardware_arduino_Led.extend({
+hardwareasdf_arduino_Signal = hardwareasdf_arduino_Signal.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

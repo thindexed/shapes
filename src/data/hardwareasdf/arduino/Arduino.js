@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var hardware_arduino_Arduino = CircuitFigure.extend({
+var hardwareasdf_arduino_Arduino = CircuitFigure.extend({
 
-   NAME: "hardware_arduino_Arduino",
+   NAME: "hardwareasdf_arduino_Arduino",
    VERSION: "local-version",
 
    init:function(attr, setter, getter)
@@ -395,7 +395,7 @@ var hardware_arduino_Arduino = CircuitFigure.extend({
  *
  *
  */
-hardware_arduino_Arduino = hardware_arduino_Arduino.extend({
+hardwareasdf_arduino_Arduino = hardwareasdf_arduino_Arduino.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);
