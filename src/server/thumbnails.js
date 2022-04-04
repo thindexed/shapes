@@ -19,6 +19,8 @@ function fileToPackage(dataDirectory, file) {
 }
 
 function concatFiles(dataDirectory) {
+  console.log("generate index.js in: ",dataDirectory)
+  
   return new Promise( (resolve, reject) => {
     try {
       let indexFile = dataDirectory + "index.js"
@@ -81,8 +83,7 @@ module.exports = {
           "let json=" + json + ";\n" +
           "let pkg='" + pkg + "';\n" +
           code;
-  
-        //console.log(injectedCode)
+
         let browser = null
         if (IN_K8S) {
           console.log("Running in K8S environment")
@@ -149,7 +150,7 @@ module.exports = {
         if(!DEBUGGING) {
           browser.close()
         }
-        resolve([
+        return resolve([
             { path: shapeRelativePath, content: Buffer.from(shapeCode).toString("base64") },
             { path: jsRelativePath, content: Buffer.from(jsCode).toString("base64") },
             { path: jsRelativePath, content: Buffer.from(jsCode).toString("base64") },
