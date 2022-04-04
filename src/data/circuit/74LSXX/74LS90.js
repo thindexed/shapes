@@ -13,88 +13,88 @@ var circuit_74LSXX_74LS90 = CircuitFigure.extend({
    {
      var _this = this;
 
-     this._super( $.extend({stroke:0, bgColor:null, width:62,height:164.7501000000002},attr), setter, getter);
+     this._super( $.extend({stroke:0, bgColor:null, width:62,height:163.7501000000002},attr), setter, getter);
      var port;
      // pin_ckb
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 11.190281523349407 }));
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 11.258619078705706 }));
      port.setConnectionDirection(3);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_ckb");
      port.setMaxFanOut(20);
      // pin_r01
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 23.329879617675285 }));
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 23.472352077952714 }));
      port.setConnectionDirection(3);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_r01");
      port.setMaxFanOut(20);
      // pin_r02
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 35.944135997489944 }));
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 36.16364203747093 }));
      port.setConnectionDirection(3);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_r02");
      port.setMaxFanOut(20);
      // pin_nc1
-     port = this.createPort("hybrid", new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 48.558392377303505 }));
+     port = this.createPort("hybrid", new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 48.854931996988036 }));
      port.setConnectionDirection(3);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_nc1");
      port.setMaxFanOut(20);
      // pin_vcc
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 60.067338350628745 }));
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 60.434161566923756 }));
      port.setConnectionDirection(3);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_vcc");
      port.setMaxFanOut(20);
      // pin_r91
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 72.6815947304423 }));
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 73.12545152644086 }));
      port.setConnectionDirection(3);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_r91");
      port.setMaxFanOut(20);
      // pin_r92
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 84.55897750593142 }));
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6501612903231297, y: 85.07536789290482 }));
      port.setConnectionDirection(3);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_r92");
      port.setMaxFanOut(20);
      // pin_qc
-     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 84.55897750593142 }));
+     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 85.07536789290482 }));
      port.setConnectionDirection(1);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_qc");
      port.setMaxFanOut(20);
      // pin_qb
-     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 72.49525189969508 }));
+     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 72.9379707249031 }));
      port.setConnectionDirection(1);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_qb");
      port.setMaxFanOut(20);
      // pin_gnd
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 60.067338350628745 }));
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 60.434161566923756 }));
      port.setConnectionDirection(1);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_gnd");
      port.setMaxFanOut(20);
      // pin_qd
-     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 48.558392377303505 }));
+     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 48.854931996988036 }));
      port.setConnectionDirection(1);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_qd");
      port.setMaxFanOut(20);
      // pin_qa
-     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 35.944135997489944 }));
+     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 36.16364203747093 }));
      port.setConnectionDirection(1);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_qa");
      port.setMaxFanOut(20);
      // pin_nc2
-     port = this.createPort("hybrid", new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 23.329879617675285 }));
+     port = this.createPort("hybrid", new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 23.472352077952714 }));
      port.setConnectionDirection(1);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_nc2");
      port.setMaxFanOut(20);
      // pin_cka
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 11.190281523349407 }));
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 101.66274193548345, y: 11.258619078705706 }));
      port.setConnectionDirection(1);
      port.setBackgroundColor("#37B1DE");
      port.setName("pin_cka");
@@ -105,7 +105,7 @@ var circuit_74LSXX_74LS90 = CircuitFigure.extend({
    {
       var shape = this._super();
       this.originalWidth = 62;
-      this.originalHeight= 164.7501000000002;
+      this.originalHeight= 163.7501000000002;
       return shape;
    },
 
@@ -114,7 +114,7 @@ var circuit_74LSXX_74LS90 = CircuitFigure.extend({
        this.canvas.paper.setStart();
        var shape = null;
        // BoundingBox
-       shape = this.canvas.paper.path("M0,0 L62,0 L62,164.7501000000002 L0,164.7501000000002");
+       shape = this.canvas.paper.path("M0,0 L62,0 L62,163.7501000000002 L0,163.7501000000002");
        shape.attr({"stroke":"none","stroke-width":0,"fill":"none"});
        shape.data("name","BoundingBox");
        
@@ -200,7 +200,7 @@ var circuit_74LSXX_74LS90 = CircuitFigure.extend({
        
        // Label
        shape = this.canvas.paper.text(0,0,'74LS90');
-       shape.attr({"x":8.5859375,"y":153.2501000000002,"text-anchor":"start","text":"74LS90","font-family":"\"Arial\"","font-size":13,"stroke":"#000000","fill":"#080808","stroke-scale":true,"font-weight":"normal","stroke-width":0,"opacity":1});
+       shape.attr({"x":8.5859375,"y":152.2501000000002,"text-anchor":"start","text":"74LS90","font-family":"\"Arial\"","font-size":13,"stroke":"#000000","fill":"#080808","stroke-scale":true,"font-weight":"normal","stroke-width":0,"opacity":1});
        shape.data("name","Label");
        
 
@@ -285,5 +285,18 @@ circuit_74LSXX_74LS90 = circuit_74LSXX_74LS90.extend({
      **/
     onStop:function( context )
     {
+    },
+
+    /**
+     * Get the simulator a hint which kind of hardware the shapes requires or supports
+     * This helps the simulator to bring up some dialogs and messages if any new hardware is connected/get lost
+     * and your are running a circuit which needs this kind of hardware...
+     **/
+    getRequiredHardware: function(){
+      return {
+        raspi: false,
+        arduino: false
+      }
     }
+
 });
