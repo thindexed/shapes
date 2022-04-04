@@ -22,37 +22,37 @@ function concatFiles(dataDirectory) {
   console.log("generate index.js in: ",dataDirectory)
   return new Promise( (resolve, reject) => {
     try {
-      let indexFile = dataDirectory + "index.js"
-      let jsonFile = dataDirectory + "index.json"
+      let indexFile = path.join(dataDirectory, "index.js")
+      let jsonFile = path.join(dataDirectory, "index.json")
+
       try {fs.unlinkSync(indexFile);} catch (exc) { console.log(exc) }
       try {fs.unlinkSync(jsonFile);} catch (exc) { console.log(exc) }
     
-      glob(dataDirectory+"/**/*.js",  (er, files) => {
-        let content = ""
-        let list = []
-        files.forEach( (filename)=>  {
-          let relativePath = filename.replace(dataDirectory, "")
-          let basenamePath = relativePath.replace(".js", "")
-          let name = basenamePath.replace(/\//g , "_").replace(/-/g , "_")
-          let basename = relativePath.split('/').pop()
-          let displayName = basename.replace(".js", "")
-          let tags = name.split("_")
-          list.push({
-            name: name,
-            tags: tags,
-            version: version,
-            basename: basename,
-            displayName: displayName,
-            basedir: relativePath.substring(0, relativePath.lastIndexOf('/')),
-            filePath: basenamePath + ".shape",
-            image: basenamePath + ".png"
-          });
-          content += (fs.readFileSync(filename, 'utf8') + "\n\n\n")
+      let files = glob.sync(dataDirectory+"/**/*.js")
+      let content = ""
+      let list = []
+      files.forEach( (filename)=>  {
+        let relativePath = filename.replace(dataDirectory, "")
+        let basenamePath = relativePath.replace(".js", "")
+        let name = basenamePath.replace(/\//g , "_").replace(/-/g , "_")
+        let basename = relativePath.split('/').pop()
+        let displayName = basename.replace(".js", "")
+        let tags = name.split("_")
+        list.push({
+          name: name,
+          tags: tags,
+          version: version,
+          basename: basename,
+          displayName: displayName,
+          basedir: relativePath.substring(0, relativePath.lastIndexOf('/')),
+          filePath: basenamePath + ".shape",
+          image: basenamePath + ".png"
         });
-    
-        fs.writeFileSync(jsonFile, JSON.stringify(list, undefined, 2))
-        fs.writeFileSync(indexFile, content)
-      })
+        content += (fs.readFileSync(filename, 'utf8') + "\n\n\n")
+      });
+  
+      fs.writeFileSync(jsonFile, JSON.stringify(list, undefined, 2))
+      fs.writeFileSync(indexFile, content)
       resolve()
     }
     catch( exc){
