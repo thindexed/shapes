@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var hardwareasdf_arduino_Signal = CircuitFigure.extend({
+var hardware_arduino_Signal = CircuitFigure.extend({
 
-   NAME: "hardwareasdf_arduino_Signal",
+   NAME: "hardware_arduino_Signal",
    VERSION: "local-version",
 
    init:function(attr, setter, getter)
@@ -68,7 +68,7 @@ var hardwareasdf_arduino_Signal = CircuitFigure.extend({
  *
  *
  */
-hardwareasdf_arduino_Signal = hardwareasdf_arduino_Signal.extend({
+hardware_arduino_Signal = hardware_arduino_Signal.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

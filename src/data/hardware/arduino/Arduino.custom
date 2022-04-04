@@ -6,7 +6,7 @@
  *
  *
  */
-hardwareasdf_arduino_Arduino = hardwareasdf_arduino_Arduino.extend({
+hardware_arduino_Arduino = hardware_arduino_Arduino.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);
