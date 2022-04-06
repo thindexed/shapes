@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt")
 const path = require("path")
 
 module.exports = {
@@ -8,9 +7,9 @@ module.exports = {
         return path.normalize(`${rootPath}global/`)
     },
 
-    absoluteUserDataDirectory: ( user) => {
+    absoluteUserDataDirectory: ( req ) => {
+        let hash = req.get("x-hash")
         let rootPath = process.env.DATA_DIR || (__dirname + "/../../data/")
-        let hash = (async ()=> await bcrypt.hash(user, 10))()
         return path.normalize(`${rootPath}user/${hash}/`)
     },
 
@@ -18,8 +17,8 @@ module.exports = {
         return "data/global"
     },
 
-    githubUserDataDirectory: (user) => {
-        let hash = ( async ()=> await bcrypt.hash(user, 10))()
+    githubUserDataDirectory: ( req ) => {
+        let hash = req.get("x-hash")
         return path.normalize(`data/user/${hash}/`)
     }
 }

@@ -71,7 +71,6 @@ module.exports = {
         return reject(`'${file}' path with dots`)
       }
   
-      file = path.normalize(file)
       if(!file.startsWith(baseDir)){
         res?.status(403).send('Unable to read file')
         return reject(`'${file}' path is not below base dir`)
@@ -108,7 +107,6 @@ module.exports = {
         return reject(`normalized path of '${file}' is different than original`)
       }
   
-      file = path.normalize(file)
       if(!file.startsWith(baseDir)){
         res?.status(403).send('Unable to read image')
         return reject(`'${file}' isn't below base directory`)
@@ -274,7 +272,8 @@ module.exports = {
 
   createFolder: function (baseDir, subDir, res=null) {
     return new Promise((resolve, reject) => {
-      subDir = sanitize(subDir).replace(/^\//,"") // remove starting "/"
+      subDir = sanitize(subDir).replace(/\/. /g,"") // remove every "/". Do not create directory paths
+      console.log(subDir)
       let directoryAbsolutePath = path.join(baseDir, subDir)
 
       if (directoryAbsolutePath !== sanitize(directoryAbsolutePath)) {
@@ -282,7 +281,7 @@ module.exports = {
         reject(`sanitized filepath '${directoryAbsolutePath}' is different than the original file`)
         return
       }
-  
+ 
       // check that the normalize path is the same as the concatenated. It is possible that these are not the same
       // if the "subDir" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
       if (directoryAbsolutePath !== path.normalize(directoryAbsolutePath)) {
@@ -297,7 +296,8 @@ module.exports = {
         reject(`'${directoryAbsolutePath}' isn't below data directory`)
         return
       }
-  
+
+      console.log("Create directory: ", directoryAbsolutePath)
       makeDir(directoryAbsolutePath)
         .then(() => {
           res?.send({
@@ -328,23 +328,27 @@ module.exports = {
       // if the "subDir" contains dots like "/dir1/dir2/../../". It is a file path attack via API calls
       if (fileAbsolutePath !== path.normalize(fileAbsolutePath)) {
         res?.status(403).send('Unable to write file')
-        reject(`normalized path of '${fileAbsolutePath}' is not equals to original filepath`)
+        return reject(`normalized path of '${fileAbsolutePath}' is not equals to original filepath`)
+      }
+  
+      if (fileDirectory !== path.normalize(fileDirectory)) {
+        res?.status(403).send('Unable to write file')
+        reject(`normalized path of '${fileDirectory}' is not equals to original filepath`)
         return
       }
   
       // normalize path must be below the parent directory
       //
-      fileDirectory = path.normalize(fileDirectory)
       if(!fileDirectory.startsWith(baseDir)){
         res?.status(403).send('Unable to write file')
-        reject(`'${fileDirectory}' isn't below data directory`)
-        return
+        return reject(`'${fileDirectory}' isn't below data directory`)
       }
   
       if (!fs.existsSync(fileDirectory)) {
         await makeDir(fileDirectory)
       }
   
+      console.log("Write File: ", fileAbsolutePath)
       fs.writeFile(fileAbsolutePath, content, err => {
         if (err)  {
           reject(err)

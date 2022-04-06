@@ -1,0 +1,26 @@
+[
+  {
+    "name": "NewComponent",
+    "tags": [
+      "NewComponent"
+    ],
+    "version": "local-version",
+    "basename": "NewComponent.js",
+    "displayName": "NewComponent",
+    "basedir": "",
+    "filePath": "NewComponent.shape",
+    "image": "NewComponent.png"
+  },
+  {
+    "name": "NewComponent2",
+    "tags": [
+      "NewComponent2"
+    ],
+    "version": "local-version",
+    "basename": "NewComponent2.js",
+    "displayName": "NewComponent2",
+    "basedir": "",
+    "filePath": "NewComponent2.shape",
+    "image": "NewComponent2.png"
+  }
+]

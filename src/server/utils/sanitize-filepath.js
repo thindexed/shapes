@@ -28,12 +28,12 @@
  */
 let truncate = require("truncate-utf8-bytes");
 
-let illegalRe = /[\?<>:\*\|": '`]/g;
+let illegalRe = /[\?<>: \$\*\|": '`]/g;
 let controlRe = /[\x00-\x1f\x80-\x9f]/g;
 let reservedRe = /^\.+$/;
 let windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
 
-function sanitize(input, replacement) {
+function sanitize(input, replacement='') {
   let sanitized = input
     .replace(illegalRe, replacement)
     .replace(controlRe, replacement)
@@ -42,11 +42,11 @@ function sanitize(input, replacement) {
   return truncate(sanitized, 255);
 }
 
-module.exports = function (input, options) {
-  let replacement = (options && options.replacement) || '';
+module.exports = function (input, replacement) {
   let output = sanitize(input, replacement);
   if (replacement === '') {
     return output;
   }
+  // second stage to be sure that the replacement itself contains no invalid characters
   return sanitize(output, '');
 };

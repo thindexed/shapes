@@ -498,9 +498,9 @@ hardware_arduino_Arduino = hardware_arduino_Arduino.extend({
 // created with http://www.draw2d.org
 //
 //
-var hardware_arduino_Signal = CircuitFigure.extend({
+var arduino_Signal = CircuitFigure.extend({
 
-   NAME: "hardware_arduino_Signal",
+   NAME: "arduino_Signal",
    VERSION: "local-version",
 
    init:function(attr, setter, getter)
@@ -562,7 +562,7 @@ var hardware_arduino_Signal = CircuitFigure.extend({
  *
  *
  */
-hardware_arduino_Signal = hardware_arduino_Signal.extend({
+arduino_Signal = arduino_Signal.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

@@ -25,8 +25,8 @@ function concatFiles(dataDirectory) {
       let indexFile = path.join(dataDirectory, "index.js")
       let jsonFile = path.join(dataDirectory, "index.json")
 
-      try {fs.unlinkSync(indexFile);} catch (exc) { console.log(exc) }
-      try {fs.unlinkSync(jsonFile);} catch (exc) { console.log(exc) }
+      try {fs.unlinkSync(indexFile);} catch (exc) { /*ignore*/ }
+      try {fs.unlinkSync(jsonFile);} catch (exc) { /*ignore*/ }
     
       let files = glob.sync(dataDirectory+"/**/*.js")
       let content = ""

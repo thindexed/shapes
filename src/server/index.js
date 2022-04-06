@@ -7,6 +7,7 @@ const http = require('http').Server(app)
 const bodyParser = require('body-parser')
 const generator = require("./thumbnails")
 const globalApi = require("./shapes/global")
+const userApi = require("./shapes/user")
 const conf = require("./configuration")
 
 console.log("serving data from :", conf.absoluteGlobalDataDirectory())
@@ -20,6 +21,7 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 
 globalApi.init(app)
+userApi.init(app)
 
 // =======================================================================
 //
