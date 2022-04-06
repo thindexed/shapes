@@ -13,15 +13,15 @@ var NewComponent2 = CircuitFigure.extend({
    {
      var _this = this;
 
-     this._super( $.extend({stroke:0, bgColor:null, width:10,height:10},attr), setter, getter);
+     this._super( $.extend({stroke:0, bgColor:null, width:135.08515832614648,height:135.08515832614648},attr), setter, getter);
      var port;
    },
 
    createShapeElement : function()
    {
       var shape = this._super();
-      this.originalWidth = 10;
-      this.originalHeight= 10;
+      this.originalWidth = 135.08515832614648;
+      this.originalHeight= 135.08515832614648;
       return shape;
    },
 
@@ -30,9 +30,19 @@ var NewComponent2 = CircuitFigure.extend({
        this.canvas.paper.setStart();
        var shape = null;
        // BoundingBox
-       shape = this.canvas.paper.path("M0,0 L10,0 L10,10 L0,10");
+       shape = this.canvas.paper.path("M0,0 L135.08515832614648,0 L135.08515832614648,135.08515832614648 L0,135.08515832614648");
        shape.attr({"stroke":"none","stroke-width":0,"fill":"none"});
        shape.data("name","BoundingBox");
+       
+       // Circle
+       shape = this.canvas.paper.ellipse();
+       shape.attr({"rx":67.54257916307313,"ry":67.54257916307313,"cx":67.54257916307313,"cy":67.54257916307313,"stroke":"none","stroke-width":0,"fill":"rgba(149,192,106,1)","dasharray":null,"stroke-dasharray":null,"opacity":1});
+       shape.data("name","Circle");
+       
+       // Rectangle
+       shape = this.canvas.paper.path('M56.54257916307324 38.54257916307324L78.54257916307324 38.54257916307324L78.54257916307324 96.54257916307324L56.54257916307324 96.54257916307324Z');
+       shape.attr({"stroke":"rgba(48,48,48,1)","stroke-width":1,"fill":"rgba(255,255,255,1)","dasharray":null,"stroke-dasharray":null,"opacity":1});
+       shape.data("name","Rectangle");
        
 
        return this.canvas.paper.setFinish();
