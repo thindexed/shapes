@@ -10,7 +10,7 @@ RUN apk add --no-cache \
       ca-certificates \
       ttf-freefont
 
-COPY ../data ./data
+COPY ./data ./data
 COPY server ./server
 COPY package.json .
 COPY package-lock.json .
