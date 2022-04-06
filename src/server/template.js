@@ -36,6 +36,7 @@ try {
             p.setVisible(false);
         });
 
+        
         canvas.getBoundingBox = function () {
             var xCoords = [];
             var yCoords = [];
