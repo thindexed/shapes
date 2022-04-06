@@ -15,13 +15,15 @@ spec:
     spec:
       containers:
       - name: shapes
-        image: docker.io/freegroup/thindexed-shapes:0.1.0-292
+        image: docker.io/freegroup/thindexed-shapes:0.1.0-337
         envFrom:
         - secretRef:
             name: github-secrets
         env:
         - name: DESIGNER_URL
           value: "https://app.<DOMAIN>/designer"
+        - name: DATA_DIR
+          value: "/app/data"
         resources:
           limits:
             cpu: "2"
