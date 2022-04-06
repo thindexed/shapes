@@ -13,15 +13,21 @@ var x_test_ddd_NewComponent = CircuitFigure.extend({
    {
      var _this = this;
 
-     this._super( $.extend({stroke:0, bgColor:null, width:10,height:10},attr), setter, getter);
+     this._super( $.extend({stroke:0, bgColor:null, width:90.90654541890854,height:90.90654541890854},attr), setter, getter);
      var port;
+     // Port
+     port = this.createPort("hybrid", new draw2d.layout.locator.XYRelPortLocator({x: 106.10157086597592, y: 52.200061602586814 }));
+     port.setConnectionDirection();
+     port.setBackgroundColor("#37B1DE");
+     port.setName("Port");
+     port.setMaxFanOut(20);
    },
 
    createShapeElement : function()
    {
       var shape = this._super();
-      this.originalWidth = 10;
-      this.originalHeight= 10;
+      this.originalWidth = 90.90654541890854;
+      this.originalHeight= 90.90654541890854;
       return shape;
    },
 
@@ -30,9 +36,14 @@ var x_test_ddd_NewComponent = CircuitFigure.extend({
        this.canvas.paper.setStart();
        var shape = null;
        // BoundingBox
-       shape = this.canvas.paper.path("M0,0 L10,0 L10,10 L0,10");
+       shape = this.canvas.paper.path("M0,0 L90.90654541890854,0 L90.90654541890854,90.90654541890854 L0,90.90654541890854");
        shape.attr({"stroke":"none","stroke-width":0,"fill":"none"});
        shape.data("name","BoundingBox");
+       
+       // Circle
+       shape = this.canvas.paper.ellipse();
+       shape.attr({"rx":45.45327270945405,"ry":45.45327270945405,"cx":45.45327270945405,"cy":45.45327270945405,"stroke":"none","stroke-width":0,"fill":"rgba(149,192,106,1)","dasharray":null,"stroke-dasharray":null,"opacity":1});
+       shape.data("name","Circle");
        
 
        return this.canvas.paper.setFinish();
