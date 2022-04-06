@@ -4,7 +4,6 @@ const glob = require("glob")
 const path = require('path')
 const makeDir = require('make-dir');
 const sanitize = require("./sanitize-filepath");
-const { resolve } = require('path');
 
 // Generic file operations for "brains" and "shapes"
 //

@@ -7,8 +7,9 @@ const http = require('http').Server(app)
 const bodyParser = require('body-parser')
 const generator = require("./thumbnails")
 const globalApi = require("./shapes/global")
+const conf = require("./configuration")
 
-const dataAbsoluteDirectory = path.normalize(__dirname + '/../data/')
+console.log("serving data from :", conf.absoluteGlobalDataDirectory())
 
 const PORT = process.env.PORT || 8080
 
@@ -30,7 +31,7 @@ globalApi.init(app)
 async function  runServer() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
-  app.use('/shapes/global', express.static(dataAbsoluteDirectory));
+  app.use('/shapes/global', express.static(conf.absoluteGlobalDataDirectory()));
 
   http.listen(PORT, function () {
     console.log("============================================================================")
@@ -39,5 +40,5 @@ async function  runServer() {
   });
 }
 
-generator.generateShapeIndex(dataAbsoluteDirectory)
+generator.generateShapeIndex(conf.absoluteGlobalDataDirectory())
 runServer()
