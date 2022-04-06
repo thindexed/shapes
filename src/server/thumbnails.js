@@ -61,6 +61,7 @@ function concatFiles(dataDirectory) {
   })
 }
 
+
 module.exports = {
 
   generateShapeIndex: concatFiles,
