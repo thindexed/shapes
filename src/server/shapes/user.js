@@ -184,15 +184,12 @@ module.exports = {
             let reason = req.body.commitMessage || "-empty-"
             filesystem.writeFile(conf.absoluteUserDataDirectory(req), shapeRelativePath, content, res)
                 .then((sanitizedRelativePath) => {
-                    console.log("generate code...")
                     return generator.thumbnail(conf.absoluteUserDataDirectory(req), sanitizedRelativePath)
                 })
                 .then((files) => {
-                    console.log("commit generated code to github")
                     return github.commit(files.map(file => { return { path: path.join(conf.githubUserDataDirectory(req), file.path), content: file.content } }), reason)
                 })
                 .then( () => {
-                    console.log("build index.js file")
                     return generator.generateShapeIndex(conf.absoluteUserDataDirectory(req))
                 })
                 .catch(reason => {
