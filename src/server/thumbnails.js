@@ -69,7 +69,7 @@ module.exports = {
   thumbnail:  (dataDirectory, shapeRelativePath) => {
     return new Promise(async (resolve, reject) => {
       let shapeAbsolutePath = path.normalize(dataDirectory + shapeRelativePath)
-
+      console.log("shapeAbsolutePath: ", shapeAbsolutePath)
       try {
         let shapeCode = fs.readFileSync(shapeAbsolutePath,'utf8')
         let json = JSON.parse(shapeCode)
@@ -150,6 +150,7 @@ module.exports = {
         if(!DEBUGGING) {
           browser.close()
         }
+        console.log("resolve code generation")
         return resolve([
             { path: shapeRelativePath, content: Buffer.from(shapeCode).toString("base64") },
             { path: jsRelativePath, content: Buffer.from(jsCode).toString("base64") },

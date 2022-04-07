@@ -185,6 +185,10 @@ module.exports = {
                 .then((files) => {
                     return github.commit(files.map(file => { return { path: path.join(conf.githubGlobalDataDirectory(), file.path), content: file.content } }), reason)
                 })
+                .then( () => {
+                    // and rebuild the shape index.js
+                    return generator.generateShapeIndex(conf.absoluteGlobalDataDirectory())
+                })
                 .catch(reason => {
                     console.log(reason)
                 })
