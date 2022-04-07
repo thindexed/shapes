@@ -7,16 +7,16 @@
 var circuit_digital_buttons_HighLow = CircuitFigure.extend({
 
    NAME: "circuit_digital_buttons_HighLow",
-   VERSION: "2.0.343_1136",
+   VERSION: "local-version",
 
    init:function(attr, setter, getter)
    {
      var _this = this;
 
-     this._super( $.extend({stroke:0, bgColor:null, width:42,height:43.5},attr), setter, getter);
+     this._super( $.extend({stroke:0, bgColor:null, width:42,height:42.5},attr), setter, getter);
      var port;
      // Port
-     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 98.80952380952381, y: 51.72413793103448 }));
+     port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 98.80952380952381, y: 52.94117647058824 }));
      port.setConnectionDirection(1);
      port.setBackgroundColor("#37B1DE");
      port.setName("Port");
@@ -27,7 +27,7 @@ var circuit_digital_buttons_HighLow = CircuitFigure.extend({
    {
       var shape = this._super();
       this.originalWidth = 42;
-      this.originalHeight= 43.5;
+      this.originalHeight= 42.5;
       return shape;
    },
 
@@ -36,7 +36,7 @@ var circuit_digital_buttons_HighLow = CircuitFigure.extend({
        this.canvas.paper.setStart();
        var shape = null;
        // BoundingBox
-       shape = this.canvas.paper.path("M0,0 L42,0 L42,43.5 L0,43.5");
+       shape = this.canvas.paper.path("M0,0 L42,0 L42,42.5 L0,42.5");
        shape.attr({"stroke":"none","stroke-width":0,"fill":"none"});
        shape.data("name","BoundingBox");
        
@@ -47,7 +47,7 @@ var circuit_digital_buttons_HighLow = CircuitFigure.extend({
        
        // Label
        shape = this.canvas.paper.text(0,0,'0');
-       shape.attr({"x":4,"y":32.5,"text-anchor":"start","text":"0","font-family":"\"Arial\"","font-size":12,"stroke":"#000000","fill":"#080808","stroke-scale":true,"font-weight":"normal","stroke-width":0,"opacity":1});
+       shape.attr({"x":4,"y":32,"text-anchor":"start","text":"0","font-family":"\"Arial\"","font-size":12,"stroke":"#000000","fill":"#080808","stroke-scale":true,"font-weight":"normal","stroke-width":0,"opacity":1});
        shape.data("name","Label");
        
        // Circle
