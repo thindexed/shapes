@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_buttons_HighLowArray = circuit_digital_buttons_HighLowArray.extend({
+digital_buttons_HighLowArray = digital_buttons_HighLowArray.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_gate_IEC60617_12_NAND = circuit_digital_gate_IEC60617_12_NAND.extend({
+digital_gate_IEC60617_12_NAND = digital_gate_IEC60617_12_NAND.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

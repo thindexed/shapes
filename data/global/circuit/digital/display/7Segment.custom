@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_display_7Segment = circuit_digital_display_7Segment.extend({
+digital_display_7Segment = digital_display_7Segment.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

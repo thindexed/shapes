@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_flipflop_TFlipFlop = CircuitFigure.extend({
+var digital_flipflop_TFlipFlop = CircuitFigure.extend({
 
-   NAME: "circuit_digital_flipflop_TFlipFlop",
+   NAME: "digital_flipflop_TFlipFlop",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -90,7 +90,7 @@ var circuit_digital_flipflop_TFlipFlop = CircuitFigure.extend({
  *
  *
  */
-circuit_digital_flipflop_TFlipFlop = circuit_digital_flipflop_TFlipFlop.extend({
+digital_flipflop_TFlipFlop = digital_flipflop_TFlipFlop.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

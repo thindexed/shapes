@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_buttons_HighLowArray = CircuitFigure.extend({
+var digital_buttons_HighLowArray = CircuitFigure.extend({
 
-   NAME: "circuit_digital_buttons_HighLowArray",
+   NAME: "digital_buttons_HighLowArray",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -135,7 +135,7 @@ var circuit_digital_buttons_HighLowArray = CircuitFigure.extend({
  *
  *
  */
-circuit_digital_buttons_HighLowArray = circuit_digital_buttons_HighLowArray.extend({
+digital_buttons_HighLowArray = digital_buttons_HighLowArray.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

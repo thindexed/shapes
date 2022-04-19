@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_gate_DIN40700_NOR = CircuitFigure.extend({
+var digital_gate_DIN40700_NOR = CircuitFigure.extend({
 
-   NAME: "circuit_digital_gate_DIN40700_NOR",
+   NAME: "digital_gate_DIN40700_NOR",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -89,7 +89,7 @@ var circuit_digital_gate_DIN40700_NOR = CircuitFigure.extend({
  * Looks disconcerting - extending my own class. But this is a good method to
  * merge basic code and override them with custom methods.
  */
-circuit_digital_gate_DIN40700_NOR = circuit_digital_gate_DIN40700_NOR.extend({
+digital_gate_DIN40700_NOR = digital_gate_DIN40700_NOR.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_signal_High = CircuitFigure.extend({
+var digital_signal_High = CircuitFigure.extend({
 
-   NAME: "circuit_digital_signal_High",
+   NAME: "digital_signal_High",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -67,7 +67,7 @@ var circuit_digital_signal_High = CircuitFigure.extend({
  * Looks disconcerting - extending my own class. But this is a good method to
  * merge basic code and override them with custom methods.
  */
-circuit_digital_signal_High = circuit_digital_signal_High.extend({
+digital_signal_High = digital_signal_High.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

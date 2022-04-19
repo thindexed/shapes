@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_flipflop_TFlipFlop = circuit_digital_flipflop_TFlipFlop.extend({
+digital_flipflop_TFlipFlop = digital_flipflop_TFlipFlop.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_timer_Delay = circuit_digital_timer_Delay.extend({
+digital_timer_Delay = digital_timer_Delay.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

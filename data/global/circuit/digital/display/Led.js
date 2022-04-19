@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_display_Led = CircuitFigure.extend({
+var digital_display_Led = CircuitFigure.extend({
 
-   NAME: "circuit_digital_display_Led",
+   NAME: "digital_display_Led",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -68,7 +68,7 @@ var circuit_digital_display_Led = CircuitFigure.extend({
  *
  *
  */
-circuit_digital_display_Led = circuit_digital_display_Led.extend({
+digital_display_Led = digital_display_Led.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

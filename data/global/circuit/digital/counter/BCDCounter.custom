@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_counter_BCDCounter = circuit_digital_counter_BCDCounter.extend({
+digital_counter_BCDCounter = digital_counter_BCDCounter.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

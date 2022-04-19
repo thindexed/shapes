@@ -10,7 +10,7 @@
  * Looks disconcerting - extending my own class. But this is a good method to
  * merge basic code and override them with custom methods.
  */
-circuit_digital_gate_DIN40700_XNOR = circuit_digital_gate_DIN40700_XNOR.extend({
+digital_gate_DIN40700_XNOR = digital_gate_DIN40700_XNOR.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

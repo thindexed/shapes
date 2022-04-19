@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_pulse_Delay = circuit_digital_pulse_Delay.extend({
+digital_pulse_Delay = digital_pulse_Delay.extend({
 
     init: function(attr, setter, getter){
      

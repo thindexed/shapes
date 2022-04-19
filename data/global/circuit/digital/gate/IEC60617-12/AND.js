@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_gate_IEC60617_12_AND = CircuitFigure.extend({
+var digital_gate_IEC60617_12_AND = CircuitFigure.extend({
 
-   NAME: "circuit_digital_gate_IEC60617_12_AND",
+   NAME: "digital_gate_IEC60617_12_AND",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -75,7 +75,7 @@ var circuit_digital_gate_IEC60617_12_AND = CircuitFigure.extend({
  *
  *
  */
-circuit_digital_gate_IEC60617_12_AND = circuit_digital_gate_IEC60617_12_AND.extend({
+digital_gate_IEC60617_12_AND = digital_gate_IEC60617_12_AND.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

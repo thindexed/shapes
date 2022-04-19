@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_gate_IEC60617_12_XOR = circuit_digital_gate_IEC60617_12_XOR.extend({
+digital_gate_IEC60617_12_XOR = digital_gate_IEC60617_12_XOR.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

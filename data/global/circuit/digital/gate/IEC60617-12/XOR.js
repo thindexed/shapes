@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_gate_IEC60617_12_XOR = CircuitFigure.extend({
+var digital_gate_IEC60617_12_XOR = CircuitFigure.extend({
 
-   NAME: "circuit_digital_gate_IEC60617_12_XOR",
+   NAME: "digital_gate_IEC60617_12_XOR",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -75,7 +75,7 @@ var circuit_digital_gate_IEC60617_12_XOR = CircuitFigure.extend({
  *
  *
  */
-circuit_digital_gate_IEC60617_12_XOR = circuit_digital_gate_IEC60617_12_XOR.extend({
+digital_gate_IEC60617_12_XOR = digital_gate_IEC60617_12_XOR.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

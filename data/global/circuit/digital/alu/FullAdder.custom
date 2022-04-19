@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_alu_FullAdder = circuit_digital_alu_FullAdder.extend({
+digital_alu_FullAdder = digital_alu_FullAdder.extend({
 
     init: function(attr, setter, getter){
          this._super(attr, setter, getter);

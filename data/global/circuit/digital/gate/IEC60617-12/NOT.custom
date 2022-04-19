@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_gate_IEC60617_12_NOT = circuit_digital_gate_IEC60617_12_NOT.extend({
+digital_gate_IEC60617_12_NOT = digital_gate_IEC60617_12_NOT.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

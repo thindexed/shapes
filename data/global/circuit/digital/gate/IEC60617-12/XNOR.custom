@@ -6,7 +6,7 @@
  *
  *
  */
-circuit_digital_gate_IEC60617_12_XNOR = circuit_digital_gate_IEC60617_12_XNOR.extend({
+digital_gate_IEC60617_12_XNOR = digital_gate_IEC60617_12_XNOR.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

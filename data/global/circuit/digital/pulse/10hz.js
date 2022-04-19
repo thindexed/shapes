@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_pulse_10hz = CircuitFigure.extend({
+var digital_pulse_10hz = CircuitFigure.extend({
 
-   NAME: "circuit_digital_pulse_10hz",
+   NAME: "digital_pulse_10hz",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -68,7 +68,7 @@ var circuit_digital_pulse_10hz = CircuitFigure.extend({
  *
  *
  */
-circuit_digital_pulse_10hz = circuit_digital_pulse_10hz.extend({
+digital_pulse_10hz = digital_pulse_10hz.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);

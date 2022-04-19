@@ -4,9 +4,9 @@
 // created with http://www.draw2d.org
 //
 //
-var circuit_digital_alu_FullAdder4Bit = CircuitFigure.extend({
+var digital_alu_FullAdder4Bit = CircuitFigure.extend({
 
-   NAME: "circuit_digital_alu_FullAdder4Bit",
+   NAME: "digital_alu_FullAdder4Bit",
    VERSION: "2.0.343_1136",
 
    init:function(attr, setter, getter)
@@ -226,7 +226,7 @@ var circuit_digital_alu_FullAdder4Bit = CircuitFigure.extend({
  *
  *
  */
-circuit_digital_alu_FullAdder4Bit = circuit_digital_alu_FullAdder4Bit.extend({
+digital_alu_FullAdder4Bit = digital_alu_FullAdder4Bit.extend({
 
     init: function(attr, setter, getter){
         this._super(attr, setter, getter);
