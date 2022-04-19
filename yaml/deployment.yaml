@@ -24,6 +24,10 @@ spec:
           value: "https://<DOMAIN>/designer"
         - name: DATA_DIR
           value: "/app/data/"
+        - name: GITHUB_REPO
+          value: shapes
+        - name: GITHUB_ORG
+          value: thindexed
         resources:
           limits:
             cpu: "2"
