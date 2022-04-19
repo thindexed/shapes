@@ -2,19 +2,28 @@ const path = require("path")
 
 module.exports = {
 
+    absoluteRootDataDirectory: () => {
+        let rootPath = process.env.DATA_DIR || (__dirname + "/../data/")
+        return path.normalize(rootPath)
+    },
+
     absoluteGlobalDataDirectory: () => {
         let rootPath = process.env.DATA_DIR || (__dirname + "/../data/")
         return path.normalize(`${rootPath}global/`)
     },
 
     absoluteUserDataDirectory: ( req ) => {
-        let hash = req.get("x-hash")
+        if(req){
+            let hash = req.get("x-hash")
+            let rootPath = process.env.DATA_DIR || (__dirname + "/../data/")
+            return path.normalize(`${rootPath}user/${hash}/`)
+        }
         let rootPath = process.env.DATA_DIR || (__dirname + "/../data/")
-        return path.normalize(`${rootPath}user/${hash}/`)
+        return path.normalize(`${rootPath}user/`)
     },
 
     githubGlobalDataDirectory: () => {
-        return "data/global"
+        return "data/global/"
     },
 
     githubUserDataDirectory: ( req ) => {

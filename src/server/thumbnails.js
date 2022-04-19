@@ -4,6 +4,9 @@ const puppeteer = require('puppeteer')
 const path = require("path")
 const fs = require("fs")
 const glob = require("glob")
+
+const conf = require("./configuration")
+
 const thisDir = path.normalize(__dirname)
 
 const version =  process.env.VERSION || "local-version"
@@ -18,7 +21,8 @@ function fileToPackage(dataDirectory, file) {
     .replace(/\//g, "_");
 }
 
-function concatFiles(dataDirectory) {
+function concatFiles(dataDirectory, scope) {
+  let rootDir = dataDirectory.replace(conf.absoluteRootDataDirectory(),"")
   console.log("generate index.js in: ",dataDirectory)
   return new Promise( (resolve, reject) => {
     try {
@@ -34,6 +38,7 @@ function concatFiles(dataDirectory) {
       files.forEach( (filename)=>  {
         let relativePath = filename.replace(dataDirectory, "")
         let basenamePath = relativePath.replace(".js", "")
+       
         let name = basenamePath.replace(/\//g , "_").replace(/-/g , "_")
         let basename = relativePath.split('/').pop()
         let displayName = basename.replace(".js", "")
@@ -41,12 +46,13 @@ function concatFiles(dataDirectory) {
         list.push({
           name: name,
           tags: tags,
+          scope: scope,
           version: version,
           basename: basename,
           displayName: displayName,
           basedir: relativePath.substring(0, relativePath.lastIndexOf('/')),
-          filePath: basenamePath + ".shape",
-          image: basenamePath + ".png"
+          shapePath:  basenamePath + ".shape",
+          imagePath: rootDir + basenamePath + ".png"
         });
         content += (fs.readFileSync(filename, 'utf8') + "\n\n\n")
       });
