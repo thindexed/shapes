@@ -16,9 +16,7 @@
     "url": "https://github.com/thindexed/generator/issues"
   },
   "dependencies": {
-
     "body-parser": "1.18.3",
-
     "express": "^4.17.3",
     "fs-extra": "^10.0.1",
     "github-api": "^3.4.0",
