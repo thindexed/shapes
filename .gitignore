@@ -9,3 +9,5 @@ data/index.json
 # dotenv environment variables file
 .env
 .env.test
+data/global/index.js
+data/global/index.json
