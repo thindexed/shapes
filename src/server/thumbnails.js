@@ -22,7 +22,6 @@ function fileToPackage(dataDirectory, file) {
 }
 
 function concatFiles(dataDirectory, scope) {
-  let rootDir = dataDirectory.replace(conf.absoluteRootDataDirectory(),"")
   console.log("generate index.js in: ",dataDirectory)
   return new Promise( (resolve, reject) => {
     try {
@@ -52,7 +51,7 @@ function concatFiles(dataDirectory, scope) {
           displayName: displayName,
           basedir: relativePath.substring(0, relativePath.lastIndexOf('/')),
           shapePath:  basenamePath + ".shape",
-          imagePath: rootDir + basenamePath + ".png"
+          imagePath:  basenamePath + ".png"
         });
         content += (fs.readFileSync(filename, 'utf8') + "\n\n\n")
       });

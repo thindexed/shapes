@@ -41,7 +41,7 @@ module.exports = {
         })
 
         app.get('/shapes/global/image', nocache, (req, res) => {
-            filesystem.getBinaryFile(conf.absoluteGlobalDataDirectory(), req.query.filePath, res)
+            filesystem.getImage(conf.absoluteGlobalDataDirectory(), req.query.filePath, res)
                 .catch(error => {
                     console.log(error)
                 })

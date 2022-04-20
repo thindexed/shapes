@@ -93,7 +93,7 @@ module.exports = {
     })
   },
 
-  getBinaryFile: function (baseDir, subDir, res=null) {
+  getImage: function (baseDir, subDir, res=null) {
     return new Promise((resolve, reject)=>{
       let file = path.join(baseDir, subDir)
 
@@ -116,32 +116,9 @@ module.exports = {
         res?.status(404).send('Not found')
         return reject(`'${file}' not found`)
       }
-      try {
-        let pngFile = file.replace(".shape",".png").replace(".brain",".png")
-        if(fs.existsSync(pngFile)) {
-          res?.sendFile(pngFile)
-          return resolve()
-        }
-        fs.readFile(file, (err, data) => {
-          let json = JSON.parse(data)
-          if (!json.image) {
-            res?.status(404).send('Not found')
-            return reject(`'${file}' not found`)
-          }
-          
-          let base64data = json.image.replace(/^data:image\/png;base64,/, '')
-          let img = Buffer.from(base64data, 'base64')
-          res?.writeHead(200, {
-            'Content-Type': 'image/png',
-            'Content-Length': img.length
-          })
-          res?.end(img)
-          resolve()
-        })
-      } catch (exc) {
-        res?.status(404).send(`not found`)
-        return reject(`'${file}' not found`)
-      }
+
+      res?.sendFile(file)
+      return resolve()
     })
   },
 
