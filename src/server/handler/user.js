@@ -38,14 +38,7 @@ module.exports = {
         })
 
         app.get('/shapes/user/get', nocache, ensureLoggedIn, (req, res) => {
-            filesystem.getJSONFile(conf.absoluteUserDataDirectory(req), req.query.filePath, res)
-                .catch(exception => {
-                    console.log(exception)
-                })
-        })
-
-        app.get('/shapes/user/image', nocache, ensureLoggedIn, (req, res) => {
-            filesystem.getImage(conf.absoluteUserDataDirectory(req), req.query.filePath, res)
+            filesystem.getBinary(conf.absoluteUserDataDirectory(req), req.query.filePath, res)
                 .catch(error => {
                     console.log(error)
                 })

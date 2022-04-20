@@ -26,7 +26,6 @@ function userHash  (req, res, next) {
 
 module.exports = {
     init: function (app) {
-        app.use('/shapes/', express.static(conf.absoluteRootDataDirectory()));
 
         // TODO: migrate to REST service API
         app.get('/shapes/index.js', nocache, userHash, (req, res) => {

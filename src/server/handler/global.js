@@ -34,19 +34,11 @@ module.exports = {
         })
 
         app.get('/shapes/global/get', nocache, (req, res) => {
-            filesystem.getJSONFile(conf.absoluteGlobalDataDirectory(), req.query.filePath, res)
-                .catch(exception => {
-                    console.log(exception)
-                })
-        })
-
-        app.get('/shapes/global/image', nocache, (req, res) => {
-            filesystem.getImage(conf.absoluteGlobalDataDirectory(), req.query.filePath, res)
+            filesystem.getBinary(conf.absoluteGlobalDataDirectory(), req.query.filePath, res)
                 .catch(error => {
                     console.log(error)
                 })
         })
-
 
         app.post('/shapes/global/delete', ensureAdminLoggedIn, (req, res) => {
             let fileRelativePath = req.body.filePath

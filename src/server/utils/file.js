@@ -57,43 +57,8 @@ module.exports = {
     })
   },
 
-  getJSONFile: function (baseDir, subDir, res=null) {
-    return new Promise((resolve, reject) => {
-      let file = path.join(baseDir, subDir)
-    
-      if (file !== sanitize(file)) {
-        res?.status(403).send('Unable to read file')
-        return reject(`'sanitize' filepath (${file}) is different from the original`)
-      }
-  
-      if (file !== path.normalize(file)) {
-        res?.status(403).send('Unable to read file')
-        return reject(`'${file}' path with dots`)
-      }
-  
-      if(!file.startsWith(baseDir)){
-        res?.status(403).send('Unable to read file')
-        return reject(`'${file}' path is not below base dir`)
-      }
-  
-      if (!fs.existsSync(file)) {
-        res?.status(404).send('Not found')
-        return reject(`'${file}' not found`)
-      }
-  
-      try {
-        let readStream = fs.createReadStream(file)
-        res?.setHeader('Content-Type', 'application/json')
-        readStream.pipe(res)
-        return resolve()
-      } catch (exc) {
-        res?.status(404).send(`'${file}' not found`)
-        return reject(exc)
-      }
-    })
-  },
 
-  getImage: function (baseDir, subDir, res=null) {
+  getBinary: function (baseDir, subDir, res=null) {
     return new Promise((resolve, reject)=>{
       let file = path.join(baseDir, subDir)
 
