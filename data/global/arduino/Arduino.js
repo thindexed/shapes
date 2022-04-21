@@ -484,7 +484,6 @@ arduino_Arduino = arduino_Arduino.extend({
     
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: true
       }
     }

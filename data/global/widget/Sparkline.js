@@ -95,7 +95,6 @@ var widget_Sparkline = draw2d.shape.diagram.Sparkline.extend({
      **/
     getRequiredHardware: function(){
         return {
-            raspi: false,
             arduino: false
         }
     }

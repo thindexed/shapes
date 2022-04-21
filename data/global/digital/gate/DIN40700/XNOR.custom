@@ -58,7 +58,6 @@ digital_gate_DIN40700_XNOR = digital_gate_DIN40700_XNOR.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }

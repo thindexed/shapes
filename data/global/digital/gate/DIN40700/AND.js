@@ -122,7 +122,6 @@ digital_gate_DIN40700_AND = digital_gate_DIN40700_AND.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }

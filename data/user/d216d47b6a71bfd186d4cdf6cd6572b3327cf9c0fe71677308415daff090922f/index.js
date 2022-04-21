@@ -98,7 +98,6 @@ NewComponent = NewComponent.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }
@@ -211,7 +210,6 @@ NewComponent2 = NewComponent2.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }

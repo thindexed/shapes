@@ -127,7 +127,6 @@ digital_gate_DIN40700_NAND = digital_gate_DIN40700_NAND.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }

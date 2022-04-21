@@ -484,7 +484,6 @@ hardware_arduino_Arduino = hardware_arduino_Arduino.extend({
     
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: true
       }
     }
@@ -892,7 +891,6 @@ circuit_74LSXX_74LS90 = circuit_74LSXX_74LS90.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }
@@ -3317,7 +3315,6 @@ circuit_digital_gate_DIN40700_AND = circuit_digital_gate_DIN40700_AND.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }
@@ -3454,7 +3451,6 @@ circuit_digital_gate_DIN40700_NAND = circuit_digital_gate_DIN40700_NAND.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }
@@ -3601,7 +3597,6 @@ circuit_digital_gate_DIN40700_NOR = circuit_digital_gate_DIN40700_NOR.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }
@@ -3743,7 +3738,6 @@ circuit_digital_gate_DIN40700_OR = circuit_digital_gate_DIN40700_OR.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }
@@ -3890,7 +3884,6 @@ circuit_digital_gate_DIN40700_XNOR = circuit_digital_gate_DIN40700_XNOR.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }
@@ -4042,7 +4035,6 @@ circuit_digital_gate_DIN40700_XOR = circuit_digital_gate_DIN40700_XOR.extend({
      **/
     getRequiredHardware: function(){
       return {
-        raspi: false,
         arduino: false
       }
     }
@@ -17704,7 +17696,6 @@ var widget_Sparkline = draw2d.shape.diagram.Sparkline.extend({
      **/
     getRequiredHardware: function(){
         return {
-            raspi: false,
             arduino: false
         }
     }
