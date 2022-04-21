@@ -7,7 +7,7 @@
 var digital_gate_IEC60617_12_AND = CircuitFigure.extend({
 
    NAME: "digital_gate_IEC60617_12_AND",
-   VERSION: "2.0.343_1136",
+   VERSION: "local-version",
 
    init:function(attr, setter, getter)
    {
@@ -15,17 +15,17 @@ var digital_gate_IEC60617_12_AND = CircuitFigure.extend({
 
      this._super( $.extend({stroke:0, bgColor:null, width:30,height:40},attr), setter, getter);
      var port;
-     // input01
-     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6666666666666667, y: 22.5 }));
-     port.setConnectionDirection(3);
-     port.setBackgroundColor("#37B1DE");
-     port.setName("input01");
-     port.setMaxFanOut(20);
      // input02
      port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6666666666666667, y: 77.5 }));
      port.setConnectionDirection(3);
      port.setBackgroundColor("#37B1DE");
      port.setName("input02");
+     port.setMaxFanOut(20);
+     // input01
+     port = this.addPort(new DecoratedInputPort(), new draw2d.layout.locator.XYRelPortLocator({x: -1.6666666666666667, y: 22.5 }));
+     port.setConnectionDirection(3);
+     port.setBackgroundColor("#37B1DE");
+     port.setName("input01");
      port.setMaxFanOut(20);
      // out
      port = this.addPort(new DecoratedOutputPort(), new draw2d.layout.locator.XYRelPortLocator({x: 104.42708333333334, y: 50 }));
