@@ -64,10 +64,50 @@
       ]
     },
     {
-      "type": "shape_designer.figure.ExtPort",
-      "id": "592a8604-e0a9-8913-445d-621078e5ae97",
-      "x": 7979.5,
+      "type": "shape_designer.figure.ExtLabel",
+      "id": "0a4705bb-c6fd-7a26-332f-6972e8683949",
+      "x": 7990.5,
       "y": 7984,
+      "width": 30.350000381469727,
+      "height": 23,
+      "alpha": 1,
+      "selectable": true,
+      "draggable": true,
+      "angle": 0,
+      "userData": {
+        "name": "Label"
+      },
+      "cssClass": "shape_designer_figure_ExtLabel",
+      "ports": [],
+      "bgColor": "rgba(0,0,0,0)",
+      "color": "rgba(27,27,27,1)",
+      "stroke": 0,
+      "radius": 0,
+      "dasharray": null,
+      "text": "&",
+      "outlineStroke": 0,
+      "outlineColor": "rgba(0,0,0,0)",
+      "fontSize": 20,
+      "fontColor": "rgba(8,8,8,1)",
+      "fontFamily": null,
+      "editor": "LabelInplaceEditor",
+      "filters": [
+        {
+          "name": "shape_designer.filter.PositionFilter"
+        },
+        {
+          "name": "shape_designer.filter.FontSizeFilter"
+        },
+        {
+          "name": "shape_designer.filter.FontColorFilter"
+        }
+      ]
+    },
+    {
+      "type": "shape_designer.figure.ExtPort",
+      "id": "5fc48f01-fecb-0d5f-ed4f-81a4bc26ae63",
+      "x": 7979.5,
+      "y": 8006,
       "width": 10,
       "height": 10,
       "alpha": 1,
@@ -75,7 +115,7 @@
       "draggable": true,
       "angle": 0,
       "userData": {
-        "name": "input01",
+        "name": "input02",
         "type": "Input",
         "direction": 3
       },
@@ -105,9 +145,9 @@
     },
     {
       "type": "shape_designer.figure.ExtPort",
-      "id": "5fc48f01-fecb-0d5f-ed4f-81a4bc26ae63",
+      "id": "592a8604-e0a9-8913-445d-621078e5ae97",
       "x": 7979.5,
-      "y": 8006,
+      "y": 7984,
       "width": 10,
       "height": 10,
       "alpha": 1,
@@ -115,7 +155,7 @@
       "draggable": true,
       "angle": 0,
       "userData": {
-        "name": "input02",
+        "name": "input01",
         "type": "Input",
         "direction": 3
       },
@@ -180,46 +220,6 @@
         },
         {
           "name": "shape_designer.filter.FillColorFilter"
-        }
-      ]
-    },
-    {
-      "type": "shape_designer.figure.ExtLabel",
-      "id": "0a4705bb-c6fd-7a26-332f-6972e8683949",
-      "x": 7990.5,
-      "y": 7984,
-      "width": 30.350000381469727,
-      "height": 23,
-      "alpha": 1,
-      "selectable": true,
-      "draggable": true,
-      "angle": 0,
-      "userData": {
-        "name": "Label"
-      },
-      "cssClass": "shape_designer_figure_ExtLabel",
-      "ports": [],
-      "bgColor": "rgba(0,0,0,0)",
-      "color": "rgba(27,27,27,1)",
-      "stroke": 0,
-      "radius": 0,
-      "dasharray": null,
-      "text": "&",
-      "outlineStroke": 0,
-      "outlineColor": "rgba(0,0,0,0)",
-      "fontSize": 20,
-      "fontColor": "rgba(8,8,8,1)",
-      "fontFamily": null,
-      "editor": "LabelInplaceEditor",
-      "filters": [
-        {
-          "name": "shape_designer.filter.PositionFilter"
-        },
-        {
-          "name": "shape_designer.filter.FontSizeFilter"
-        },
-        {
-          "name": "shape_designer.filter.FontColorFilter"
         }
       ]
     }
